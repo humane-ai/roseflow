@@ -4,8 +4,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
   context "API" do
     context "Low-level bindings" do
       context "Core functions" do
-        subject(:api) { described_class::API }
-
         CORE_FUNCTIONS = [
           :delete_status,
           :get_code,
@@ -31,8 +29,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Graphs" do
-        let(:api) { described_class::API }
-
         GRAPH_FUNCTIONS = [
           :delete_graph,
           :new_graph
@@ -52,8 +48,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Session" do
-        let(:api) { described_class::API }
-
         SESSION_FUNCTIONS = [
           :close_session,
           :delete_session,
@@ -109,8 +103,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Tensors", skip: true do
-        let(:api) { described_class::API }
-
         TF_INT = 6
 
         TENSOR_FUNCTIONS = [
@@ -197,8 +189,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Code" do
-        let(:api) { described_class::API }
-
         it "returns the code of the status object" do
           status = api.new_status()
           expect(api.get_code(status)).to be_a Symbol
@@ -207,8 +197,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Status" do
-        let(:api) { described_class::API }
-
         context "Creating a new status object" do
           it "creates new status object" do
             expect(api.new_status()).to be_a TensorFlow::LibTensorFlow::Status
@@ -253,8 +241,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Buffers" do
-        let(:api) { described_class::API }
-
         BUFFER_FUNCTIONS = [
           :delete_buffer,
           :get_buffer,
@@ -292,8 +278,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Utility functions" do
-        let(:api) { described_class::API }
-
         UTILITY_FUNCTIONS = [
           :decode_string,
           :encode_string,

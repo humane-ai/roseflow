@@ -1,3 +1,4 @@
+require "tensorflow/libtensorflow/managed_pointer"
 require "tensorflow/libtensorflow/types/buffer"
 require "tensorflow/libtensorflow/types/code"
 require "tensorflow/libtensorflow/types/data_type"

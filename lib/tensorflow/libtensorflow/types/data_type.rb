@@ -1,4 +1,4 @@
 module TensorFlow::LibTensorFlow
-  class DataType < FFI::AutoPointer
+  class DataType < ManagedPointer
   end
 end

@@ -1,5 +1,5 @@
 module TensorFlow::LibTensorFlow
-  class Tensor < FFI::AutoPointer
+  class Tensor < ManagedPointer
     def dimensions
       TensorFlow::LibTensorFlow::API.number_of_tensor_dimensions(self)
     end
@@ -18,12 +18,6 @@ module TensorFlow::LibTensorFlow
 
     def type
       TensorFlow::LibTensorFlow::API.tensor_type(self)
-    end
-
-    class << self
-      def release(pointer)
-        TensorFlow::LibTensorFlow::API.delete_tensor(pointer)
-      end
     end
   end
 end

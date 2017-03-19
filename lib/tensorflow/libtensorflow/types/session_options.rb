@@ -1,9 +1,4 @@
 module TensorFlow::LibTensorFlow
-  class SessionOptions < FFI::AutoPointer
-    class << self
-      def release(pointer)
-        free
-      end
-    end
+  class SessionOptions < ManagedPointer
   end
 end

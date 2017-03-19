@@ -1,9 +1,4 @@
 module TensorFlow::LibTensorFlow
-  class OperationOutput < FFI::AutoPointer
-    class << self
-      def release(pointer)
-        free
-      end
-    end
+  class OperationOutput < ManagedPointer
   end
 end

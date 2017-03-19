@@ -1,5 +1,5 @@
 module TensorFlow::LibTensorFlow
-  class Status < FFI::AutoPointer
+  class Status < ManagedPointer
     def code
       TensorFlow::LibTensorFlow::API.get_code(self)
     end
@@ -13,12 +13,6 @@ module TensorFlow::LibTensorFlow
 
     def message
       TensorFlow::LibTensorFlow::API.message(self)
-    end
-
-    class << self
-      def release(pointer)
-        TensorFlow::LibTensorFlow::API.delete_status(pointer)
-      end
     end
   end
 end
