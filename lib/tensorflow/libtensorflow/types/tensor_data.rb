@@ -1,8 +1,8 @@
 module TensorFlow::LibTensorFlow
-  class Buffer < FFI::AutoPointer
+  class TensorData < FFI::AutoPointer
     class << self
       def release(pointer)
-        TensorFlow::LibTensorFlow::Api.delete_buffer(pointer)
+        free
       end
     end
   end

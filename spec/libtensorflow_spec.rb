@@ -6,8 +6,17 @@ RSpec.describe TensorFlow::LibTensorFlow do
       context "Core functions" do
         subject(:api) { described_class::Api }
 
+        CORE_FUNCTIONS = [
+          :delete_status,
+          :get_code,
+          :message,
+          :new_status,
+          :set_status,
+          :version
+        ]
+
         it "binds core functions of the C API" do
-          [ :delete_status, :get_code, :message, :new_status, :version ].each do |method_name|
+          CORE_FUNCTIONS.each do |method_name|
             expect(api).to respond_to(method_name)
           end
         end
@@ -27,7 +36,12 @@ RSpec.describe TensorFlow::LibTensorFlow do
         TENSOR_FUNCTIONS = [
           :allocate_tensor,
           :delete_tensor,
-          :new_tensor
+          :new_tensor,
+          :number_of_tensor_dimensions,
+          :tensor_byte_size,
+          :tensor_data,
+          :tensor_length_in_dimension,
+          :tensor_type
         ]
 
         it "binds tensor functions of the C API" do
@@ -38,21 +52,67 @@ RSpec.describe TensorFlow::LibTensorFlow do
 
         context "Creating a new tensor" do
           context "with #new_tensor" do
-            it "creates a new tensor" do
-              pending "Not implemented"
-            end
+            pending "Not implemented"
           end
 
           context "with #allocate_tensor" do
             TF_INT = 6
 
             it "creates a new tensor" do
-              array = [2,1]
-              pointer = FFI::MemoryPointer.new :int, array.size
-              pointer.put_array_of_int 0, array
+              pointer = FFI::MemoryPointer.new :int, [2,1].size
+              pointer.put_array_of_int 0, [2,1]
               expect(api.allocate_tensor(TF_INT, pointer, 1, pointer.size)).to be_a TensorFlow::LibTensorFlow::Tensor
-              p api.allocate_tensor(TF_INT, pointer, 1, pointer.size).dimensions
             end
+          end
+        end
+
+        context "Tensor type" do
+          it "returns the type of tensor" do
+            pointer = FFI::MemoryPointer.new :int, [2,1].size
+            pointer.put_array_of_int 0, [2,1]
+            tensor = api.allocate_tensor(TF_INT, pointer, 1, pointer.size)
+            expect(api.tensor_type(tensor)).to eq :dt_int8
+            expect(tensor.type).to eq :dt_int8
+          end
+        end
+
+        context "Number of dimensions" do
+          it "returns the number of dimensions of the tensor" do
+            pointer = FFI::MemoryPointer.new :int, [2,4].size
+            pointer.put_array_of_int 0, [2,4]
+            tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
+            expect(api.number_of_tensor_dimensions(tensor)).to eq 4
+            expect(tensor.dimensions).to eq 4
+          end
+        end
+
+        context "Length in dimension" do
+          it "returns the length of the tensor in given dimension" do
+            pointer = FFI::MemoryPointer.new :int, [2,4].size
+            pointer.put_array_of_int 0, [2,4]
+            tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
+            expect(api.tensor_length_in_dimension(tensor, 0)).to eq 17179869186
+            expect(tensor.length(0)).to eq 17179869186
+          end
+        end
+
+        context "Size of underlying data in bytes" do
+          it "returns the size of the data in bytes" do
+            pointer = FFI::MemoryPointer.new :int, [2,4].size
+            pointer.put_array_of_int 0, [2,4]
+            tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
+            expect(api.tensor_byte_size(tensor)).to eq 8
+            expect(tensor.byte_size).to eq 8
+          end
+        end
+
+        context "Pointer to data buffer" do
+          it "returns a pointer to underlying data buffer" do
+            pointer = FFI::MemoryPointer.new :int, [2,4].size
+            pointer.put_array_of_int 0, [2,4]
+            tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
+            expect(api.tensor_data(tensor)).to be_a TensorFlow::LibTensorFlow::TensorData
+            expect(tensor.data).to be_a TensorFlow::LibTensorFlow::TensorData
           end
         end
       end
@@ -113,6 +173,45 @@ RSpec.describe TensorFlow::LibTensorFlow do
         end
       end
 
+      context "Buffers" do
+        let(:api) { described_class::Api }
+
+        BUFFER_FUNCTIONS = [
+          :delete_buffer,
+          :get_buffer,
+          :new_buffer,
+          :new_buffer_from_string
+        ]
+
+        it "binds buffer functions of the C API" do
+          BUFFER_FUNCTIONS.each do |method_name|
+            expect(api).to respond_to(method_name)
+          end
+        end
+
+        context "Getting a buffer" do
+          pending "Not implemented"
+        end
+
+        context "Creating a new buffer" do
+          context "New buffer" do
+            it "creates a new buffer" do
+              expect(api.new_buffer).to be_a TensorFlow::LibTensorFlow::Buffer
+            end
+          end
+
+          context "New buffer from string" do
+            it "creates a new buffer from string" do
+              expect(api.new_buffer_from_string("Hello", 5)).to be_a TensorFlow::LibTensorFlow::Buffer
+            end
+
+            it "requires an appropriate length for the buffer" do
+              expect(api.new_buffer_from_string("Yeah", 2)).to be_a TensorFlow::LibTensorFlow::Buffer
+            end
+          end
+        end
+      end
+
       context "Utility functions" do
         let(:api) { described_class::Api }
 
@@ -138,10 +237,11 @@ RSpec.describe TensorFlow::LibTensorFlow do
           end
         end
 
-        context "String decoding" do
+        context "String decoding", skip: true do
           let(:status) { api.new_status() }
+          let(:string) { api.encode_string("Hello", 5, "olleH", 6, status) }
 
-          subject(:subject) { api.decode_string("Hello", 6, "Hello", 5, status) }
+          subject(:subject) { api.decode_string("olleH", 6, "Hello", 5, status) }
 
           it "decodes a string" do
             expect(subject).to be_truthy

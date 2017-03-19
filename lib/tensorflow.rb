@@ -1,4 +1,5 @@
 module TensorFlow
 end
 
-require 'tensorflow/libtensorflow'
+require "numo/narray"
+require "tensorflow/libtensorflow"

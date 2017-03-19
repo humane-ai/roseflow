@@ -14,17 +14,3 @@ module TensorFlow::LibTensorFlow
     end
   end
 end
-
-class TensorArray < Array
-  attr_reader :data_type
-
-  def to_tensor
-    result = []
-    case self.data_type
-    when Float
-      self.each_with_index { |value, position| result[position] = value.to_f }
-    when Fixnum
-      self.each_with_index { |value, position| result[position] = value.to_int }
-    end
-  end
-end

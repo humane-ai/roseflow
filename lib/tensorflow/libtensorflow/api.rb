@@ -72,9 +72,10 @@ module TensorFlow::LibTensorFlow
       }
     }
 
+    #
+    # Tensor functions
+    #
     tensor_functions = {
-      # extern TF_Tensor* TF_AllocateTensor(TF_DataType, const int64_t* dims,
-      #                               int num_dims, size_t len);
       allocate_tensor: {
         name: "TF_AllocateTensor",
         returns: Tensor,
@@ -88,21 +89,73 @@ module TensorFlow::LibTensorFlow
       new_tensor: {
         name: "TF_NewTensor",
         returns: :pointer,
-        options: [ :int, :long_long, :int, :pointer, :int, :pointer, :pointer ]
+        options: [ :int, :pointer, :int, :pointer, :size_t, :pointer, :pointer ]
+      },
+      number_of_tensor_dimensions: {
+        name: "TF_NumDims",
+        returns: :int,
+        options: [ :pointer ]
+      },
+      tensor_byte_size: {
+        name: "TF_TensorByteSize",
+        returns: :size_t,
+        options: [ :pointer ]
+      },
+      tensor_data: {
+        name: "TF_TensorData",
+        returns: TensorData,
+        options: [ :pointer ]
+      },
+      tensor_length_in_dimension: {
+        name: "TF_Dim",
+        returns: :int64,
+        options: [ :pointer, :int ]
+      },
+      tensor_type: {
+        name: "TF_TensorType",
+        returns: :data_type,
+        options: [ :pointer ]
       }
     }
 
+    #
+    # Buffer related functions
+    #
+    buffer_functions = {
+      delete_buffer: {
+        name: "TF_DeleteBuffer",
+        returns: :void,
+        options: [ :pointer ]
+      },
+      get_buffer: {
+        name: "TF_GetBuffer",
+        returns: :pointer,
+        options: [ :pointer ]
+      },
+      new_buffer: {
+        name: "TF_NewBuffer",
+        returns: Buffer,
+        options: []
+      },
+      new_buffer_from_string: {
+        name: "TF_NewBufferFromString",
+        returns: Buffer,
+        options: [ :string, :size_t ]
+      }
+    }
+
+    #
+    # Utility functions
+    #
     utility_functions = {
-      # extern size_t TF_StringEncode(const char* src, size_t src_len, char* dst,
-      #                         size_t dst_len, TF_Status* status);
       decode_string: {
         name: "TF_StringDecode",
-        returns: :long_long,
-        options: [ :string, :uint16, :pointer ]
+        returns: :size_t,
+        options: [ :string, :size_t, :string, :size_t, :pointer ]
       },
       encode_string: {
         name: "TF_StringEncode",
-        returns: :long_long,
+        returns: :size_t,
         options: [ :string, :size_t, :string, :size_t, :pointer ]
       },
       string_encoded_size: {
@@ -115,7 +168,7 @@ module TensorFlow::LibTensorFlow
     #
     # Attaching the functions
     #
-    [ core_functions, tensor_functions, utility_functions ].each do |functions|
+    [ core_functions, buffer_functions, tensor_functions, utility_functions ].each do |functions|
       functions.each do |method_name, arguments|
         attach_function method_name.to_sym, arguments[:name].to_sym, arguments[:options], arguments[:returns]
       end
