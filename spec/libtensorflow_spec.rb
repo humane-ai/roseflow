@@ -51,6 +51,23 @@ RSpec.describe TensorFlow::LibTensorFlow do
         end
       end
 
+      context "Session" do
+        let(:api) { described_class::API }
+
+        SESSION_FUNCTIONS = [
+          :close_session,
+          :delete_session,
+          :new_session,
+          :run_session
+        ]
+
+        it "binds session functions of the C API" do
+          SESSION_FUNCTIONS.each do |method_name|
+            expect(api).to respond_to(method_name)
+          end
+        end
+      end
+
       context "Operations" do
         let(:api) { described_class::API }
 
