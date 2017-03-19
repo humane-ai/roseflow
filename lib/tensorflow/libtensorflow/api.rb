@@ -1,8 +1,9 @@
+require "tensorflow/libtensorflow/data_converters"
 require "tensorflow/libtensorflow/structs"
 require "tensorflow/libtensorflow/types"
 
 module TensorFlow::LibTensorFlow
-  module Api
+  module API
     extend FFI::Library
 
     ffi_lib TensorFlow::LibTensorFlow::LIB_SO_NAMES
@@ -67,7 +68,7 @@ module TensorFlow::LibTensorFlow
       },
       version: {
         name: "TF_Version",
-        returns: :string,
+        returns: UTF8String,
         options: []
       }
     }

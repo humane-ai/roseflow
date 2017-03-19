@@ -4,7 +4,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
   context "API" do
     context "Low-level bindings" do
       context "Core functions" do
-        subject(:api) { described_class::Api }
+        subject(:api) { described_class::API }
 
         CORE_FUNCTIONS = [
           :delete_status,
@@ -31,7 +31,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Tensors" do
-        let(:api) { described_class::Api }
+        let(:api) { described_class::API }
 
         TENSOR_FUNCTIONS = [
           :allocate_tensor,
@@ -118,7 +118,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Code" do
-        let(:api) { described_class::Api }
+        let(:api) { described_class::API }
 
         it "returns the code of the status object" do
           status = api.new_status()
@@ -128,7 +128,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Status" do
-        let(:api) { described_class::Api }
+        let(:api) { described_class::API }
 
         context "Creating a new status object" do
           it "creates new status object" do
@@ -174,7 +174,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Buffers" do
-        let(:api) { described_class::Api }
+        let(:api) { described_class::API }
 
         BUFFER_FUNCTIONS = [
           :delete_buffer,
@@ -213,7 +213,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Utility functions" do
-        let(:api) { described_class::Api }
+        let(:api) { described_class::API }
 
         UTILITY_FUNCTIONS = [
           :decode_string,
