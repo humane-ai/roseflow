@@ -4,10 +4,20 @@ RSpec.describe TensorFlow::LibTensorFlow::Utility do
   context "Determining shape of a value" do
     let(:dummy) { Class.new { extend TensorFlow::LibTensorFlow::Utility } }
 
-    subject(:subject) { dummy.shape_of([[2], [4]]) }
+    subject(:multi_dimensional) { dummy.shape_of([[2], [4]]) }
+    subject(:single_dimensional) { dummy.shape_of([1, 2]) }
+    subject(:string) { dummy.shape_of("String") }
 
-    it "returns the shape of an array" do
-      expect(subject).to eq [2,1]
+    it "returns the shape of a multi-dimensional array" do
+      expect(multi_dimensional).to eq [2,1]
+    end
+
+    it "returns the shape of a single-dimensional array" do
+      expect(single_dimensional).to eq [2]
+    end
+
+    it "raises an error when it cannot compute the shape" do
+      expect{ string }.to raise_error(Numo::NArray::CastError)
     end
   end
 end

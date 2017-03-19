@@ -73,6 +73,19 @@ module TensorFlow::LibTensorFlow
       }
     }
 
+    graph_functions = {
+      delete_graph: {
+        name: "TF_DeleteGraph",
+        returns: :void,
+        options: [ Graph ]
+      },
+      new_graph: {
+        name: "TF_NewGraph",
+        returns: Graph,
+        options: []
+      }
+    }
+
     #
     # Tensor functions
     #
@@ -169,7 +182,7 @@ module TensorFlow::LibTensorFlow
     #
     # Attaching the functions
     #
-    [ core_functions, buffer_functions, tensor_functions, utility_functions ].each do |functions|
+    [ core_functions, buffer_functions, graph_functions, tensor_functions, utility_functions ].each do |functions|
       functions.each do |method_name, arguments|
         attach_function method_name.to_sym, arguments[:name].to_sym, arguments[:options], arguments[:returns]
       end

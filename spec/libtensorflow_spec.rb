@@ -30,6 +30,27 @@ RSpec.describe TensorFlow::LibTensorFlow do
         end
       end
 
+      context "Graphs" do
+        let(:api) { described_class::API }
+
+        GRAPH_FUNCTIONS = [
+          :delete_graph,
+          :new_graph
+        ]
+
+        it "binds graph functions of the C API" do
+          GRAPH_FUNCTIONS.each do |method_name|
+            expect(api).to respond_to(method_name)
+          end
+        end
+
+        context "Creating a graph" do
+          it "creates a new graph" do
+            expect(api.new_graph()).to be_a TensorFlow::LibTensorFlow::Graph
+          end
+        end
+      end
+
       context "Tensors" do
         let(:api) { described_class::API }
 
