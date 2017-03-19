@@ -9,3 +9,4 @@ module TensorFlow
 end
 
 require "tensorflow/libtensorflow/api"
+require "tensorflow/libtensorflow/utility"
