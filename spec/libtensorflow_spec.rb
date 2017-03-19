@@ -51,8 +51,50 @@ RSpec.describe TensorFlow::LibTensorFlow do
         end
       end
 
-      context "Tensors" do
+      context "Operations" do
         let(:api) { described_class::API }
+
+        OPERATION_FUNCTIONS = [
+          :new_operation
+        ]
+
+        it "binds operation functions of the C API" do
+          OPERATION_FUNCTIONS.each do |method_name|
+            expect(api).to respond_to(method_name)
+          end
+        end
+
+        context "Creating an operation" do
+          it "creates a new operation" do
+            graph = TensorFlow::LibTensorFlow::API.new_graph()
+            expect(api.new_operation(graph, "foo", "bar")).to be_a TensorFlow::LibTensorFlow::OperationDescription
+          end
+        end
+
+        context "Finish an operation" do
+          it "finishes an operation" do
+            graph = TensorFlow::LibTensorFlow::API.new_graph()
+            description = api.new_operation(graph, "Placeholder", "tensor1")
+            pointer = FFI::MemoryPointer.new :double, [2.to_f,1].size
+            pointer.put_array_of_double 0, [2.to_f,1]
+            pointer.inspect
+            status = api.new_status()
+            api.set_attribute_shape(description, "shape", pointer, pointer.size)
+            api.set_attribute_type(description, "shape", 2)
+            p status.code
+            p status.message
+            status = api.new_status()
+            expect(api.finish_operation(description, status)).to be_a FFI::Pointer
+            p status.message
+            expect(status.code).to eq :ok
+          end
+        end
+      end
+
+      context "Tensors", skip: true do
+        let(:api) { described_class::API }
+
+        TF_INT = 6
 
         TENSOR_FUNCTIONS = [
           :allocate_tensor,
@@ -77,8 +119,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
           end
 
           context "with #allocate_tensor" do
-            TF_INT = 6
-
             it "creates a new tensor" do
               pointer = FFI::MemoryPointer.new :int, [2,1].size
               pointer.put_array_of_int 0, [2,1]
@@ -99,8 +139,9 @@ RSpec.describe TensorFlow::LibTensorFlow do
 
         context "Number of dimensions" do
           it "returns the number of dimensions of the tensor" do
-            pointer = FFI::MemoryPointer.new :int, [2,4].size
-            pointer.put_array_of_int 0, [2,4]
+            array = [2]
+            pointer = FFI::MemoryPointer.new :int, array.size
+            pointer.put_array_of_int 0, array
             tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
             expect(api.number_of_tensor_dimensions(tensor)).to eq 4
             expect(tensor.dimensions).to eq 4
@@ -129,8 +170,8 @@ RSpec.describe TensorFlow::LibTensorFlow do
 
         context "Pointer to data buffer" do
           it "returns a pointer to underlying data buffer" do
-            pointer = FFI::MemoryPointer.new :int, [2,4].size
-            pointer.put_array_of_int 0, [2,4]
+            pointer = FFI::MemoryPointer.new :int, [2].size
+            pointer.put_array_of_int 0, [2]
             tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
             expect(api.tensor_data(tensor)).to be_a TensorFlow::LibTensorFlow::TensorData
             expect(tensor.data).to be_a TensorFlow::LibTensorFlow::TensorData
