@@ -1,10 +1,13 @@
-# Tensorflow
+# TensorFlow for Ruby
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/tensorflow`. To experiment with that code, run `bin/console` for an interactive prompt.
+[TensorFlow™](https://tensorflow.org) is an open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (tensors) communicated between them. The flexible architecture allows you to deploy computation to one or more CPUs or GPUs in a desktop, server, or mobile device with a single API.
 
-TODO: Delete this and the text above, and describe your gem
+The [TensorFlow C API](https://www.tensorflow.org/code/tensorflow/c/c_api.h) exposes internal core functions of TensorFlow that enable constructing and executing TensorFlow graphs. This gem providers access to the complete TensorFlow C API from within Ruby.
 
 ## Installation
+
+Pre-requisites:
+- TensorFlow library
 
 Add this line to your application's Gemfile:
 
@@ -20,6 +23,17 @@ Or install it yourself as:
 
     $ gem install tensorflow
 
+### Installing TensorFlow
+
+You must have TensorFlow library installed to use this gem.
+
+#### Mac OSX
+
+You can install it with Homebrew
+
+```brew install libtensorflow```
+
+
 ## Usage
 
 TODO: Write usage instructions here
@@ -32,7 +46,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/ljuti/tensorflow.
+Bug reports and pull requests are welcome on GitHub at https://github.com/humane-ai/tensorflow.
 
 ## License
 

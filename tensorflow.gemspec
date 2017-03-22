@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["ruby@laurijutila.com"]
 
   spec.description   = %q{TensorFlow!}
-  spec.homepage      = "https://github.com/ljuti/tensorflow"
+  spec.homepage      = "https://github.com/humane-ai/tensorflow"
 
   spec.summary       = %q{TensorFlow!}
   spec.license       = "MIT"
