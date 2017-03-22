@@ -78,20 +78,20 @@ RSpec.describe TensorFlow::LibTensorFlow do
         context "Creating an operation" do
           it "creates a new operation" do
             graph = TensorFlow::LibTensorFlow::API.new_graph()
-            expect(api.new_operation(graph, "foo", "bar")).to be_a TensorFlow::LibTensorFlow::OperationDescription
+            expect(api.new_operation(graph, "Const", "")).to be_a TensorFlow::LibTensorFlow::OperationDescription
           end
         end
 
         context "Finish an operation" do
           it "finishes an operation" do
             graph = TensorFlow::LibTensorFlow::API.new_graph()
-            description = api.new_operation(graph, "Placeholder", "tensor1")
-            pointer = FFI::MemoryPointer.new :double, [2.to_f,1].size
-            pointer.put_array_of_double 0, [2.to_f,1]
-            pointer.inspect
+            description = api.new_operation(graph, "Const", "")
+            pointer = FFI::MemoryPointer.new :int, [2.to_f,1].size
+            pointer.put_array_of_int 0, [2,1]
             status = api.new_status()
-            api.set_attribute_shape(description, "shape", pointer, pointer.size)
-            api.set_attribute_type(description, "shape", 2)
+            api.set_attribute_integer(description, "value", 1)
+            # api.set_attribute_shape(description, "shape", pointer, pointer.size)
+            # api.set_attribute_type(description, "shape", 2)
             p status.code
             p status.message
             status = api.new_status()
@@ -102,8 +102,8 @@ RSpec.describe TensorFlow::LibTensorFlow do
         end
       end
 
-      context "Tensors", skip: true do
-        TF_INT = 6
+      context "Tensors" do
+        TF_INT64 = 10
 
         TENSOR_FUNCTIONS = [
           :allocate_tensor,
@@ -129,59 +129,64 @@ RSpec.describe TensorFlow::LibTensorFlow do
 
           context "with #allocate_tensor" do
             it "creates a new tensor" do
-              pointer = FFI::MemoryPointer.new :int, [2,1].size
-              pointer.put_array_of_int 0, [2,1]
-              expect(api.allocate_tensor(TF_INT, pointer, 1, pointer.size)).to be_a TensorFlow::LibTensorFlow::Tensor
+              array = Numo::Int64.cast([[2,1],[1,2]])
+              pointer = FFI::MemoryPointer.new :int64, array.byte_size
+              pointer.put_array_of_int64 0, array
+              expect(api.allocate_tensor(TF_INT64, pointer, array.shape.size, array.byte_size)).to be_a TensorFlow::LibTensorFlow::Tensor
             end
           end
         end
 
         context "Tensor type" do
           it "returns the type of tensor" do
-            pointer = FFI::MemoryPointer.new :int, [2,1].size
-            pointer.put_array_of_int 0, [2,1]
-            tensor = api.allocate_tensor(TF_INT, pointer, 1, pointer.size)
-            expect(api.tensor_type(tensor)).to eq :dt_int8
-            expect(tensor.type).to eq :dt_int8
+            array = Numo::Int64.cast([[2,1],[1,2]])
+            pointer = FFI::MemoryPointer.new :int64, array.byte_size
+            pointer.put_array_of_int64 0, array
+            tensor = api.allocate_tensor(TF_INT64, pointer, array.shape.size, array.byte_size)
+            expect(api.tensor_type(tensor)).to eq :dt_int64
+            expect(tensor.type).to eq :dt_int64
           end
         end
 
         context "Number of dimensions" do
           it "returns the number of dimensions of the tensor" do
-            array = [2]
-            pointer = FFI::MemoryPointer.new :int, array.size
-            pointer.put_array_of_int 0, array
-            tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
-            expect(api.number_of_tensor_dimensions(tensor)).to eq 4
-            expect(tensor.dimensions).to eq 4
+            array = Numo::Int64.cast([[2,1],[1,2]])
+            pointer = FFI::MemoryPointer.new :int64, array.byte_size
+            pointer.put_array_of_int64 0, array
+            tensor = api.allocate_tensor(TF_INT64, pointer, array.shape.size, array.byte_size)
+            expect(api.number_of_tensor_dimensions(tensor)).to eq 2
+            expect(tensor.dimensions).to eq 2
           end
         end
 
         context "Length in dimension" do
           it "returns the length of the tensor in given dimension" do
-            pointer = FFI::MemoryPointer.new :int, [2,4].size
-            pointer.put_array_of_int 0, [2,4]
-            tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
-            expect(api.tensor_length_in_dimension(tensor, 0)).to eq 17179869186
-            expect(tensor.length(0)).to eq 17179869186
+            array = Numo::Int64.cast([[2,1],[1,2]])
+            pointer = FFI::MemoryPointer.new :int64, array.byte_size
+            pointer.put_array_of_int64 0, array
+            tensor = api.allocate_tensor(TF_INT64, pointer, array.shape.size, array.byte_size)
+            expect(api.tensor_length_in_dimension(tensor, 1)).to eq 0
+            expect(tensor.length(1)).to eq 0
           end
         end
 
         context "Size of underlying data in bytes" do
           it "returns the size of the data in bytes" do
-            pointer = FFI::MemoryPointer.new :int, [2,4].size
-            pointer.put_array_of_int 0, [2,4]
-            tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
-            expect(api.tensor_byte_size(tensor)).to eq 8
-            expect(tensor.byte_size).to eq 8
+            array = Numo::Int64.cast([[2,1],[1,2]])
+            pointer = FFI::MemoryPointer.new :int64, array.byte_size
+            pointer.put_array_of_int64 0, array
+            tensor = api.allocate_tensor(TF_INT64, pointer, array.shape.size, array.byte_size)
+            expect(api.tensor_byte_size(tensor)).to eq 32
+            expect(tensor.byte_size).to eq 32
           end
         end
 
         context "Pointer to data buffer" do
           it "returns a pointer to underlying data buffer" do
-            pointer = FFI::MemoryPointer.new :int, [2].size
-            pointer.put_array_of_int 0, [2]
-            tensor = api.allocate_tensor(TF_INT, pointer, 4, pointer.size)
+            array = Numo::Int64.cast([[2,1],[1,2]])
+            pointer = FFI::MemoryPointer.new :int64, array.byte_size
+            pointer.put_array_of_int64 0, array
+            tensor = api.allocate_tensor(TF_INT64, pointer, array.shape.size, array.byte_size)
             expect(api.tensor_data(tensor)).to be_a TensorFlow::LibTensorFlow::TensorData
             expect(tensor.data).to be_a TensorFlow::LibTensorFlow::TensorData
           end

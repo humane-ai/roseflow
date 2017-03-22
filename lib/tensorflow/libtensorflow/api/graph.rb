@@ -9,6 +9,16 @@ module TensorFlow::LibTensorFlow
         returns: :void,
         options: [ Graph ]
       },
+      graph_get_number_of_tensor_dimensions: {
+        name: "TF_GraphGetTensorNumDims",
+        returns: :int,
+        options: [ Graph, OperationOutput, Status ]
+      },
+      graph_get_tensor_shape: {
+        name: "TF_GraphGetTensorShape",
+        returns: :void,
+        options: [ Graph, OperationOutput, :int64, :int, Status ]
+      },
       graph_operation_by_name: {
         name: "TF_GraphOperationByName",
         returns: Operation,
@@ -18,6 +28,11 @@ module TensorFlow::LibTensorFlow
         name: "TF_GraphNextOperation",
         returns: Operation,
         options: [ Graph, :size_t ]
+      },
+      graph_set_tensor_shape: {
+        name: "TF_GraphSetTensorShape",
+        returns: :void,
+        options: [ Graph, OperationOutput, :int64, :int, Status ]
       },
       graph_to_graph_definition: {
         name: "TF_GraphToGraphDef",

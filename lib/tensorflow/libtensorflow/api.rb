@@ -37,6 +37,12 @@ module TensorFlow::LibTensorFlow
                   :failed_precondition, :aborted, :out_of_range, :unimplemented,
                   :internal, :unavailable, :data_loss, :unauthenticated
                 ]
+
+    enum :attribute_type, [
+                            :attr_string, :attr_int, :attr_float, :attr_boolean,
+                            :attr_type, :attr_shape, :attr_tensor, :attr_placeholder,
+                            :attr_function
+                          ]
   end
 end
 

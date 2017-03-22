@@ -7,7 +7,7 @@ module TensorFlow::LibTensorFlow
       allocate_tensor: {
         name: "TF_AllocateTensor",
         returns: Tensor,
-        options: [ :int, :pointer, :int, :size_t ]
+        options: [ :data_type, :pointer, :int, :size_t ]
       },
       delete_tensor: {
         name: "TF_DeleteTensor",
