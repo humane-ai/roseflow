@@ -4,6 +4,10 @@
 
 The [TensorFlow C API](https://www.tensorflow.org/code/tensorflow/c/c_api.h) exposes internal core functions of TensorFlow that enable constructing and executing TensorFlow graphs. This gem providers access to the complete TensorFlow C API from within Ruby.
 
+**WARNING**
+
+_This gem is still early in development and does not yet provide any easy way to use TensorFlow in Ruby. All C API calls are mapped over the FFI, but some of them are still incomplete or not properly covered by tests._
+
 ## Installation
 
 Pre-requisites:
