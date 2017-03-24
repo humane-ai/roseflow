@@ -12,7 +12,7 @@ module TensorFlow::LibTensorFlow
       add_input: {
         name: "TF_AddInput",
         returns: :void,
-        options: [ OperationDescription, OperationOutput ]
+        options: [ OperationDescription, :output ]
       },
       add_input_list: {
         name: "TF_AddInputList",
@@ -21,7 +21,7 @@ module TensorFlow::LibTensorFlow
       },
       finish_operation: {
         name: "TF_FinishOperation",
-        returns: :pointer,
+        returns: Operation,
         options: [ OperationDescription, Status ]
       },
       get_all_operations: {
@@ -141,7 +141,7 @@ module TensorFlow::LibTensorFlow
       },
       operation_input: {
         name: "TF_OperationInput",
-        returns: OperationOutput,
+        returns: :output,
         options: [ OperationInput ]
       },
       operation_input_list_length: {
@@ -182,12 +182,12 @@ module TensorFlow::LibTensorFlow
       operation_number_of_output_consumers: {
         name: "TF_OperationOutputNumConsumers",
         returns: :int,
-        options: [ OperationOutput ]
+        options: [ :output ]
       },
       operation_output_consumers: {
         name: "TF_OperationOutputConsumers",
         returns: :int,
-        options: [ OperationOutput, OperationInput, :int ]
+        options: [ :output, OperationInput, :int ]
       },
       operation_output_list_length: {
         name: "TF_OperationOutputListLength",

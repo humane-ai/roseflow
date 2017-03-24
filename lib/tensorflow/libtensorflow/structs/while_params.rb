@@ -3,11 +3,11 @@ module TensorFlow::LibTensorFlow
     class WhileParams < FFI::ManagedStruct
       layout  :inputs, :int,
               :condition_graph, Graph,
-              :condition_inputs, OperationOutput,
-              :condition_output, OperationOutput,
+              :condition_inputs, Output,
+              :condition_output, Output,
               :body_graph, Graph,
-              :body_inputs, OperationOutput,
-              :body_output, OperationOutput,
+              :body_inputs, Output,
+              :body_output, Output,
               :name, :string
     end
   end

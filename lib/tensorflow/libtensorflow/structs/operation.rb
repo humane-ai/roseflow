@@ -1,7 +1,7 @@
 module TensorFlow::LibTensorFlow
   module Structs
-    class Operation < FFI::ManagedStruct
-      layout  :graph, :pointer
+    class Operation < FFI::Struct
+      layout  :graph, Graph
     end
   end
 end

@@ -45,6 +45,7 @@ module TensorFlow::LibTensorFlow
                           ]
 
     typedef ::TensorFlow::LibTensorFlow::Buffer, :buffer
+    typedef ::TensorFlow::LibTensorFlow::Output, :output
   end
 end
 

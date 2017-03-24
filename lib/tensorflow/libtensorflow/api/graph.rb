@@ -12,12 +12,12 @@ module TensorFlow::LibTensorFlow
       graph_get_number_of_tensor_dimensions: {
         name: "TF_GraphGetTensorNumDims",
         returns: :int,
-        options: [ Graph, OperationOutput, Status ]
+        options: [ Graph, :output, Status ]
       },
       graph_get_tensor_shape: {
         name: "TF_GraphGetTensorShape",
         returns: :void,
-        options: [ Graph, OperationOutput, :int64, :int, Status ]
+        options: [ Graph, :output, :int64, :int, Status ]
       },
       graph_operation_by_name: {
         name: "TF_GraphOperationByName",
@@ -32,7 +32,7 @@ module TensorFlow::LibTensorFlow
       graph_set_tensor_shape: {
         name: "TF_GraphSetTensorShape",
         returns: :void,
-        options: [ Graph, OperationOutput, :int64, :int, Status ]
+        options: [ Graph, :output, :int64, :int, Status ]
       },
       graph_to_graph_definition: {
         name: "TF_GraphToGraphDef",

@@ -1,5 +1,15 @@
 module TensorFlow::LibTensorFlow
   class Tensor < ManagedPointer
+    class << self
+      def to_native(value, ctx)
+        attr_value = TensorFlow::LibTensorFlow::Protobuf::AttrValue.new
+        attr_value.tensor = value
+        attr_value.type = TensorFlow::LibTensorFlow::Protobuf::DataType::DT_STRING
+        attr_value.to_proto
+        # TensorFlow::LibTensorFlow::Protobuf::AttrValue.new(tensor: value, dtype: TensorFlow::LibTensorFlow::Protobuf::DataType::DT_STRING).to_proto
+      end
+    end
+
     def dimensions
       TensorFlow::LibTensorFlow::API.number_of_tensor_dimensions(self)
     end

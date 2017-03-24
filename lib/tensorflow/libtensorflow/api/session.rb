@@ -52,7 +52,7 @@ module TensorFlow::LibTensorFlow
       run_session: {
         name: "TF_SessionRun",
         returns: :void,
-        options: [ Session, :buffer, OperationOutput, Tensor, :int, OperationOutput, Tensor, :int, Operation, :int, :buffer, Status ]
+        options: [ Session, :buffer, :output, Tensor, :int, :output, Tensor, :int, Operation, :int, :buffer, Status ]
       },
       set_config: {
         name: "TF_SetConfig",

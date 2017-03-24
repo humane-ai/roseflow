@@ -87,10 +87,6 @@ RSpec.describe TensorFlow::LibTensorFlow do
             graph = TensorFlow::LibTensorFlow::API.new_graph()
             expect(api.new_operation(graph, "Const", "")).to be_a TensorFlow::LibTensorFlow::OperationDescription
           end
-
-          it "creates a new operation" do
-            graph = TensorFlow::LibTensorFlow::API.new_graph()
-          end
         end
 
         context "Get all operations" do
@@ -109,7 +105,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
             # array = Numo::Int64.cast([[2,1],[1,2]])
             # pointer = FFI::Pointer.new :int64, array.byte_size
             # pointer.put_array_of_int64 0, array
-            # output = TensorFlow::LibTensorFlow::OperationOutput.new(pointer)
+            # output = TensorFlow::LibTensorFlow::Output.new(pointer)
             # p output
             # api.add_input(description, output)
             # status = api.new_status()

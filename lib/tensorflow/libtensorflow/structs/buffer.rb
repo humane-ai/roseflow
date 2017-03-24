@@ -1,6 +1,6 @@
 module TensorFlow::LibTensorFlow
   module Structs
-    class Buffer < FFI::ManagedStruct
+    class Buffer < FFI::Struct
       layout  :data, :pointer,
               :length, :size_t
     end
