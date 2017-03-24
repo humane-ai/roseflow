@@ -33,10 +33,9 @@ You must have TensorFlow library installed to use this gem.
 
 #### Mac OSX
 
-You can install it with Homebrew
+You can install TensorFlow library with Homebrew
 
-```brew install libtensorflow```
-
+    $ brew install libtensorflow
 
 ## Usage
 

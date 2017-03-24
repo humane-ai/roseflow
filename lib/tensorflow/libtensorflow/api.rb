@@ -43,6 +43,8 @@ module TensorFlow::LibTensorFlow
                             :attr_type, :attr_shape, :attr_tensor, :attr_placeholder,
                             :attr_function
                           ]
+
+    typedef ::TensorFlow::LibTensorFlow::Buffer, :buffer
   end
 end
 

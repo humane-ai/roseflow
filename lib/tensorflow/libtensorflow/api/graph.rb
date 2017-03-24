@@ -37,7 +37,7 @@ module TensorFlow::LibTensorFlow
       graph_to_graph_definition: {
         name: "TF_GraphToGraphDef",
         returns: :void,
-        options: [ Graph, Buffer, Status ]
+        options: [ Graph, :buffer, Status ]
       },
       new_graph: {
         name: "TF_NewGraph",

@@ -9,4 +9,5 @@ module TensorFlow
 end
 
 require "tensorflow/libtensorflow/api"
+require "tensorflow/libtensorflow/protobuf"
 require "tensorflow/libtensorflow/utility"

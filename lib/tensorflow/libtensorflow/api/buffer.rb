@@ -7,21 +7,21 @@ module TensorFlow::LibTensorFlow
       delete_buffer: {
         name: "TF_DeleteBuffer",
         returns: :void,
-        options: [ :pointer ]
+        options: [ :buffer ]
       },
       get_buffer: {
         name: "TF_GetBuffer",
-        returns: :pointer,
+        returns: :buffer,
         options: [ :pointer ]
       },
       new_buffer: {
         name: "TF_NewBuffer",
-        returns: Buffer,
+        returns: :buffer,
         options: []
       },
       new_buffer_from_string: {
         name: "TF_NewBufferFromString",
-        returns: Buffer,
+        returns: :buffer,
         options: [ :string, :size_t ]
       }
     }

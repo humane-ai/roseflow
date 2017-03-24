@@ -24,6 +24,11 @@ module TensorFlow::LibTensorFlow
         returns: :pointer,
         options: [ OperationDescription, Status ]
       },
+      get_all_operations: {
+        name: "TF_GetAllOpList",
+        returns: :buffer,
+        options: []
+      },
       new_operation: {
         name: "TF_NewOperation",
         returns: OperationDescription,
@@ -112,12 +117,12 @@ module TensorFlow::LibTensorFlow
       operation_get_attribute_tensor_shape_proto: {
         name: "TF_OperationGetAttrTensorShapeProto",
         returns: :void,
-        options: [ Operation, :string, Buffer, Status ]
+        options: [ Operation, :string, :buffer, Status ]
       },
       operation_get_attribute_tensor_shape_proto_list: {
         name: "TF_OperationGetAttrTensorShapeProtoList",
         returns: :void,
-        options: [ Operation, :string, Buffer, :int, Status ]
+        options: [ Operation, :string, :buffer, :int, Status ]
       },
       operation_get_attribute_type: {
         name: "TF_OperationGetAttrType",
@@ -132,7 +137,7 @@ module TensorFlow::LibTensorFlow
       operation_get_attribute_value_proto: {
         name: "TF_OperationGetAttrValueProto",
         returns: :void,
-        options: [ Operation, :string, Buffer, Status ]
+        options: [ Operation, :string, :buffer, Status ]
       },
       operation_input: {
         name: "TF_OperationInput",

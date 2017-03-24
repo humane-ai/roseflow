@@ -75,29 +75,50 @@ RSpec.describe TensorFlow::LibTensorFlow do
           end
         end
 
+        context "Operation list" do
+          it "returns a list of all operations" do
+            result = api.get_all_operations()
+            expect(result).to be_a TensorFlow::LibTensorFlow::Buffer
+          end
+        end
+
         context "Creating an operation" do
           it "creates a new operation" do
             graph = TensorFlow::LibTensorFlow::API.new_graph()
             expect(api.new_operation(graph, "Const", "")).to be_a TensorFlow::LibTensorFlow::OperationDescription
           end
+
+          it "creates a new operation" do
+            graph = TensorFlow::LibTensorFlow::API.new_graph()
+          end
         end
 
+        context "Get all operations" do
+          it "calls C API for all operations" do
+            result = api.get_all_operations
+            expect(result).to be_a TensorFlow::LibTensorFlow::Buffer
+          end
+        end
+
+        # TODO: This is totally in an experimental phase.
         context "Finish an operation" do
           it "finishes an operation" do
             graph = TensorFlow::LibTensorFlow::API.new_graph()
-            description = api.new_operation(graph, "Const", "")
-            pointer = FFI::MemoryPointer.new :int, [2.to_f,1].size
-            pointer.put_array_of_int 0, [2,1]
-            status = api.new_status()
-            api.set_attribute_integer(description, "value", 1)
-            # api.set_attribute_shape(description, "shape", pointer, pointer.size)
-            # api.set_attribute_type(description, "shape", 2)
-            p status.code
-            p status.message
-            status = api.new_status()
-            expect(api.finish_operation(description, status)).to be_a FFI::Pointer
-            p status.message
-            expect(status.code).to eq :ok
+            description = api.new_operation(graph, "Concat", "c")
+            p description.read_string.unpack("Q")
+            # array = Numo::Int64.cast([[2,1],[1,2]])
+            # pointer = FFI::Pointer.new :int64, array.byte_size
+            # pointer.put_array_of_int64 0, array
+            # output = TensorFlow::LibTensorFlow::OperationOutput.new(pointer)
+            # p output
+            # api.add_input(description, output)
+            # status = api.new_status()
+            # p status.code
+            # p status.message
+            # status = api.new_status()
+            # expect(api.finish_operation(description, status)).to be_a FFI::Pointer
+            # p status.message
+            # expect(status.code).to eq :ok
           end
         end
       end

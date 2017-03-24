@@ -26,12 +26,12 @@ module TensorFlow::LibTensorFlow
       },
       get_all_ops_list: {
         name: "TF_GetAllOpList",
-        returns: Buffer,
+        returns: :buffer,
         options: []
       },
       get_ops_list: {
         name: "TF_GetOpList",
-        returns: Buffer,
+        returns: :buffer,
         options: [ Library ]
       },
       load_library: {
@@ -52,7 +52,7 @@ module TensorFlow::LibTensorFlow
       run_session: {
         name: "TF_SessionRun",
         returns: :void,
-        options: [ Session, Buffer, OperationOutput, Tensor, :int, OperationOutput, Tensor, :int, Operation, :int, Buffer, Status ]
+        options: [ Session, :buffer, OperationOutput, Tensor, :int, OperationOutput, Tensor, :int, Operation, :int, :buffer, Status ]
       },
       set_config: {
         name: "TF_SetConfig",

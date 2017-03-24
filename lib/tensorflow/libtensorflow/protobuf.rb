@@ -1,0 +1,6 @@
+require "tensorflow/libtensorflow/definitions/attr_value_pb"
+require "tensorflow/libtensorflow/definitions/op_def_pb"
+require "tensorflow/libtensorflow/definitions/resource_handle_pb"
+require "tensorflow/libtensorflow/definitions/tensor_shape_pb"
+require "tensorflow/libtensorflow/definitions/tensor_pb"
+require "tensorflow/libtensorflow/definitions/types_pb"
