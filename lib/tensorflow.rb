@@ -24,4 +24,5 @@ module TensorFlow
 end
 
 require "numo/narray"
+require "tensorflow/graph"
 require "tensorflow/libtensorflow"
