@@ -1,0 +1,309 @@
+{
+  "node": [
+    {
+      "name": "Variable/initial_value",
+      "op": "Const",
+      "input": [],
+      "attr": {
+        "dtype": {
+          "type": "DT_FLOAT"
+        },
+        "value": {
+          "tensor": {
+            "dtype": "DT_FLOAT",
+            "tensorShape": {
+              "dim": [
+                {
+                  "size": 1
+                }
+              ]
+            },
+            "floatVal": [
+              0.30000001
+            ],
+            "doubleVal": [],
+            "intVal": [],
+            "stringVal": [],
+            "scomplexVal": [],
+            "int64Val": [],
+            "boolVal": [],
+            "dcomplexVal": [],
+            "halfVal": [],
+            "resourceHandleVal": []
+          }
+        }
+      }
+    },
+    {
+      "name": "Variable",
+      "op": "VariableV2",
+      "input": [],
+      "attr": {
+        "container": {
+          "s": ""
+        },
+        "dtype": {
+          "type": "DT_FLOAT"
+        },
+        "shape": {
+          "shape": {
+            "dim": [
+              {
+                "size": 1
+              }
+            ]
+          }
+        },
+        "shared_name": {
+          "s": ""
+        }
+      }
+    },
+    {
+      "name": "Variable/Assign",
+      "op": "Assign",
+      "input": [
+        "Variable",
+        "Variable/initial_value"
+      ],
+      "attr": {
+        "_class": {
+          "list": {
+            "s": [
+              "bG9jOkBWYXJpYWJsZQ=="
+            ],
+            "i": [],
+            "f": [],
+            "b": [],
+            "type": [],
+            "shape": [],
+            "tensor": [],
+            "func": []
+          }
+        },
+        "use_locking": {
+          "b": true
+        },
+        "validate_shape": {
+          "b": true
+        },
+        "T": {
+          "type": "DT_FLOAT"
+        }
+      }
+    },
+    {
+      "name": "Variable/read",
+      "op": "Identity",
+      "input": [
+        "Variable"
+      ],
+      "attr": {
+        "_class": {
+          "list": {
+            "s": [
+              "bG9jOkBWYXJpYWJsZQ=="
+            ],
+            "i": [],
+            "f": [],
+            "b": [],
+            "type": [],
+            "shape": [],
+            "tensor": [],
+            "func": []
+          }
+        },
+        "T": {
+          "type": "DT_FLOAT"
+        }
+      }
+    },
+    {
+      "name": "Variable_1/initial_value",
+      "op": "Const",
+      "input": [],
+      "attr": {
+        "dtype": {
+          "type": "DT_FLOAT"
+        },
+        "value": {
+          "tensor": {
+            "dtype": "DT_FLOAT",
+            "tensorShape": {
+              "dim": [
+                {
+                  "size": 1
+                }
+              ]
+            },
+            "floatVal": [
+              -0.30000001
+            ],
+            "doubleVal": [],
+            "intVal": [],
+            "stringVal": [],
+            "scomplexVal": [],
+            "int64Val": [],
+            "boolVal": [],
+            "dcomplexVal": [],
+            "halfVal": [],
+            "resourceHandleVal": []
+          }
+        }
+      }
+    },
+    {
+      "name": "Variable_1",
+      "op": "VariableV2",
+      "input": [],
+      "attr": {
+        "container": {
+          "s": ""
+        },
+        "dtype": {
+          "type": "DT_FLOAT"
+        },
+        "shape": {
+          "shape": {
+            "dim": [
+              {
+                "size": 1
+              }
+            ]
+          }
+        },
+        "shared_name": {
+          "s": ""
+        }
+      }
+    },
+    {
+      "name": "Variable_1/Assign",
+      "op": "Assign",
+      "input": [
+        "Variable_1",
+        "Variable_1/initial_value"
+      ],
+      "attr": {
+        "_class": {
+          "list": {
+            "s": [
+              "bG9jOkBWYXJpYWJsZV8x"
+            ],
+            "i": [],
+            "f": [],
+            "b": [],
+            "type": [],
+            "shape": [],
+            "tensor": [],
+            "func": []
+          }
+        },
+        "use_locking": {
+          "b": true
+        },
+        "validate_shape": {
+          "b": true
+        },
+        "T": {
+          "type": "DT_FLOAT"
+        }
+      }
+    },
+    {
+      "name": "Variable_1/read",
+      "op": "Identity",
+      "input": [
+        "Variable_1"
+      ],
+      "attr": {
+        "_class": {
+          "list": {
+            "s": [
+              "bG9jOkBWYXJpYWJsZV8x"
+            ],
+            "i": [],
+            "f": [],
+            "b": [],
+            "type": [],
+            "shape": [],
+            "tensor": [],
+            "func": []
+          }
+        },
+        "T": {
+          "type": "DT_FLOAT"
+        }
+      }
+    },
+    {
+      "name": "Placeholder",
+      "op": "Placeholder",
+      "input": [],
+      "attr": {
+        "shape": {
+          "shape": {
+            "dim": []
+          }
+        },
+        "dtype": {
+          "type": "DT_FLOAT"
+        }
+      }
+    },
+    {
+      "name": "Placeholder_1",
+      "op": "Placeholder",
+      "input": [],
+      "attr": {
+        "shape": {
+          "shape": {
+            "dim": []
+          }
+        },
+        "dtype": {
+          "type": "DT_FLOAT"
+        }
+      }
+    },
+    {
+      "name": "mul",
+      "op": "Mul",
+      "input": [
+        "Variable/read",
+        "Placeholder"
+      ],
+      "attr": {
+        "T": {
+          "type": "DT_FLOAT"
+        }
+      }
+    },
+    {
+      "name": "add",
+      "op": "Add",
+      "input": [
+        "mul",
+        "Variable_1/read"
+      ],
+      "attr": {
+        "T": {
+          "type": "DT_FLOAT"
+        }
+      }
+    },
+    {
+      "name": "init",
+      "op": "NoOp",
+      "input": [
+        "^Variable/Assign",
+        "^Variable_1/Assign"
+      ],
+      "attr": {}
+    }
+  ],
+  "versions": {
+    "producer": 21,
+    "badConsumers": []
+  }
+}
