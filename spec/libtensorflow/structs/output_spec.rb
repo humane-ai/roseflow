@@ -15,7 +15,7 @@ RSpec.describe TensorFlow::LibTensorFlow::Structs::Output do
     end
   end
 
-  context "with an empty pointer", skip: "FIXME" do
+  context "with an empty pointer" do
     let(:memory) do
       pointer = FFI::MemoryPointer.new(:int64)
       pointer.write_int64(0)
@@ -29,15 +29,10 @@ RSpec.describe TensorFlow::LibTensorFlow::Structs::Output do
 
     specify do
       expect(subject[:oper]).to be_a TensorFlow::LibTensorFlow::Structs::Operation
-      expect(subject[:index]).to eq 0
     end
-
-    # it "is empty" do
-    #   expect(subject[:oper]).to be_null
-    # end
   end
 
-  context "with a filled struct pointer", skip: "IMPLEMENT" do
+  context "with a filled struct pointer" do
     let(:data) do
       pointer = FFI::MemoryPointer.new(:int64)
       pointer.write_int64(8192)
@@ -46,21 +41,21 @@ RSpec.describe TensorFlow::LibTensorFlow::Structs::Output do
 
     let(:memory) do
       klass = Class.new(FFI::Struct) do
-        layout  :data, :pointer,
-                :length, :size_t
+        layout  :oper, :pointer,
+                :index, :int
       end
 
       klass.new.tap do |struct|
-        struct[:data] = data
-        struct[:length] = data.size
+        struct[:oper] = data
+        struct[:index] = 0
       end
     end
 
     subject(:subject) { described_class.new(memory.pointer) }
 
     it "has data" do
-      expect(subject[:data].read_int64).to eq 8192
-      expect(subject[:length]).to eq 8
+      expect(subject[:oper]).to be_a TensorFlow::LibTensorFlow::Structs::Operation
+      expect(subject[:index]).to eq 0
     end
   end
 end

@@ -1,5 +1,7 @@
 module TensorFlow::LibTensorFlow
   module API
+    typedef TensorFlow::LibTensorFlow::Structs::Output.by_ref, :operation_struct
+
     #
     # Operation functions
     #
@@ -12,7 +14,7 @@ module TensorFlow::LibTensorFlow
       add_input: {
         name: "TF_AddInput",
         returns: :void,
-        options: [ OperationDescription, :output ]
+        options: [ OperationDescription, :operation_struct ]
       },
       add_input_list: {
         name: "TF_AddInputList",

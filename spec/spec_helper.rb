@@ -8,4 +8,8 @@ RSpec.configure do |config|
   def api
     TensorFlow::LibTensorFlow::API
   end
+
+  def fixture_path
+    File.expand_path("../fixtures/", __FILE__)
+  end
 end

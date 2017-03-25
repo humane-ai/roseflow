@@ -39,9 +39,19 @@ module TensorFlow::LibTensorFlow
         returns: :void,
         options: [ Graph, :buffer, Status ]
       },
+      load_graph_from_graph_definition: {
+        name: "TF_GraphImportGraphDef",
+        returns: :void,
+        options: [ Graph, :pointer, :pointer, Status ]
+      },
       new_graph: {
         name: "TF_NewGraph",
         returns: Graph,
+        options: []
+      },
+      new_graph_import_options: {
+        name: "TF_NewImportGraphDefOptions",
+        returns: :pointer,
         options: []
       }
     }
