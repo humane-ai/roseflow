@@ -19,6 +19,36 @@ RSpec.describe "TensorFlow API Operation functions" do
     end
   end
 
+  context "Converting an operation to node definition" do
+    let(:graph) { api.new_graph() }
+    let(:graph_def) do
+      graph_file = File.read(fixture_path + "/graph/graph.pb")
+      pointer = graph_file_to_pointer(graph_file)
+      buffer = TensorFlow::LibTensorFlow::Structs::Buffer.new
+      buffer[:data] = pointer
+      buffer[:length] = pointer.size
+      buffer
+    end
+    let(:options) { api.new_graph_import_options() }
+
+    it "writes a buffer containing a node definition" do
+      status = api.new_status()
+      api.load_graph_from_graph_definition(graph, graph_def.to_ptr, options, status)
+      expect(status.code).to eq :ok
+      operation = api.graph_operation_by_name(graph, "a")
+      expect(operation).to be_a TensorFlow::LibTensorFlow::Operation
+      buffer = api.new_buffer()
+      p buffer.read_string
+      status = api.new_status()
+      expect(api.operation_to_node_def(operation, buffer, status)).to be_nil
+      expect(status.code).to eq :ok
+      returning = api.get_buffer(buffer)
+      expect(returning).to be_a TensorFlow::LibTensorFlow::Buffer
+      p string = returning.read_string
+      p Google::Protobuf.decode(TensorFlow::LibTensorFlow::Protobuf::NodeDef, string)
+    end
+  end
+
   # TODO: WIP.
   context "Operation type", skip: "FIXME" do
     it "returns the type of the operation" do
@@ -58,5 +88,12 @@ RSpec.describe "TensorFlow API Operation functions" do
       p status.message
       expect(result).to be_a TensorFlow::LibTensorFlow::Operation
     end
+  end
+
+  def graph_file_to_pointer(input_file)
+    byte_count = input_file.unpack("C*").size
+    pointer = FFI::MemoryPointer.new(:char, byte_count)
+    pointer.put_bytes(0, input_file, 0, byte_count)
+    pointer
   end
 end

@@ -201,6 +201,11 @@ module TensorFlow::LibTensorFlow
         returns: :data_type,
         options: [ :pointer ]
       },
+      operation_to_node_def: {
+        name: "TF_OperationToNodeDef",
+        returns: :void,
+        options: [ Operation, :buffer, Status ]
+      },
       operation_type: {
         name: "TF_OperationOpType",
         returns: :string,

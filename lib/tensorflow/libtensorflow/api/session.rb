@@ -1,5 +1,8 @@
 module TensorFlow::LibTensorFlow
   module API
+    typedef Session, :session
+    typedef SessionOptions, :session_options
+
     #
     # Session functions
     #
@@ -7,7 +10,7 @@ module TensorFlow::LibTensorFlow
       close_session: {
         name: "TF_CloseSession",
         returns: :void,
-        options: [ Session, Status ]
+        options: [ :session, Status ]
       },
       delete_library_handle: {
         name: "TF_DeleteLibraryHandle",
@@ -17,12 +20,12 @@ module TensorFlow::LibTensorFlow
       delete_session: {
         name: "TF_DeleteSession",
         returns: :void,
-        options: [ Session, Status ]
+        options: [ :session, Status ]
       },
       delete_session_options: {
         name: "TF_DeleteSessionOptions",
         returns: :void,
-        options: [ SessionOptions ]
+        options: [ :session_options ]
       },
       get_all_ops_list: {
         name: "TF_GetAllOpList",
@@ -42,27 +45,27 @@ module TensorFlow::LibTensorFlow
       new_session: {
         name: "TF_NewSession",
         returns: Session,
-        options: [ Graph, SessionOptions, Status ]
+        options: [ Graph, :session_options, Status ]
       },
       new_session_options: {
         name: "TF_NewSessionOptions",
-        returns: SessionOptions,
+        returns: :session_options,
         options: []
       },
       run_session: {
         name: "TF_SessionRun",
         returns: :void,
-        options: [ Session, :buffer, :output, Tensor, :int, :output, Tensor, :int, Operation, :int, :buffer, Status ]
+        options: [ :session, :buffer, :output, Tensor, :int, :output, Tensor, :int, Operation, :int, :buffer, Status ]
       },
       set_config: {
         name: "TF_SetConfig",
         returns: :void,
-        options: [ SessionOptions, SessionConfig, :size_t, Status ]
+        options: [ :session_options, SessionConfig, :size_t, Status ]
       },
       set_target: {
         name: "TF_SetTarget",
         returns: :void,
-        options: [ SessionOptions, :string ]
+        options: [ :session_options, :string ]
       }
     }
 
