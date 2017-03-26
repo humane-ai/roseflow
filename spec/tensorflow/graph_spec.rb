@@ -30,9 +30,32 @@ RSpec.describe TensorFlow::Graph do
     end
 
     describe "#nodes" do
-      it "returns the nodes of the graph" do
-        expect(subject.nodes).to be_a Array
-        expect(subject.nodes).to be_empty
+      context "Empty graph" do
+        it "returns the nodes of the graph" do
+          expect(subject.nodes).to be_a Array
+          expect(subject.nodes).to be_empty
+        end
+      end
+
+      context "Graph with nodes" do
+        let(:json) { File.read(fixture_path + "/graph/json/regression.json") }
+
+        before do
+          subject.from_json(json)
+        end
+
+        it "returns the nodes of the graph" do
+          expect(subject.nodes).to be_a Array
+          expect(subject.nodes.count).to eq 13
+          subject.nodes.each do |node|
+            expect(node).to be_a TensorFlow::Node
+          end
+        end
+
+        it "allows to access nodes with alias" do
+          expect(subject.layers).to be_a Array
+          expect(subject.layers.count).to eq 13
+        end
       end
     end
   end

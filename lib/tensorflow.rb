@@ -25,4 +25,6 @@ end
 
 require "numo/narray"
 require "tensorflow/graph"
+require "tensorflow/node"
+require "tensorflow/session"
 require "tensorflow/libtensorflow"

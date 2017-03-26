@@ -9,9 +9,12 @@ module TensorFlow
 
   class Graph
     PROTOBUF_CLASS = ::TensorFlow::LibTensorFlow::Protobuf::GraphDef
+
     attr_reader :name
     attr_reader :nodes
     attr_reader :definition
+
+    alias :layers :nodes
 
     def initialize(*args)
       if args && args.is_a?(Hash) && args[:name]
@@ -28,12 +31,20 @@ module TensorFlow
 
     def from_json(json)
       @definition = ::Google::Protobuf.decode_json(PROTOBUF_CLASS, json)
+      convert_to_nodes
     end
 
     def from_file(file)
       @definition = ::Google::Protobuf.decode(PROTOBUF_CLASS, file.read)
+      convert_to_nodes
     ensure
       file.close
+    end
+
+    def convert_to_nodes
+      definition.node.each do |node|
+        @nodes << Node.from_nodedef(node)
+      end
     end
 
     def to_graphdef
