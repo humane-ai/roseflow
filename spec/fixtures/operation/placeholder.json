@@ -1,0 +1,15 @@
+{
+  "name": "MyPlaceholder",
+  "op": "Placeholder",
+  "input": [],
+  "attr": {
+    "shape": {
+      "shape": {
+        "dim": []
+      }
+    },
+    "dtype": {
+      "type": "DT_FLOAT"
+    }
+  }
+}

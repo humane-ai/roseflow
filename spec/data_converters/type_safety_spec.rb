@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "spec_helper"
 
-RSpec.describe TensorFlow::LibTensorFlow::TypeSafety do
+RSpec.describe Roseflow::Tensorflow::TypeSafety do
   let(:superklass) do
     Class.new do
       def self.to_native(value, ctx)
@@ -12,7 +12,7 @@ RSpec.describe TensorFlow::LibTensorFlow::TypeSafety do
 
   let(:klass) do
     Class.new(superklass) do
-      extend TensorFlow::LibTensorFlow::TypeSafety
+      extend Roseflow::Tensorflow::TypeSafety
 
       def self.type_class
         self

@@ -1,10 +1,10 @@
 # encoding: utf-8
 require "spec_helper"
 
-RSpec.describe TensorFlow::LibTensorFlow::ManagedPointer do
+RSpec.describe Roseflow::Tensorflow::ManagedPointer do
   let(:null) { FFI::Pointer::NULL }
   let(:pointer) { FFI::Pointer.new(1) }
-  let(:klass) { TensorFlow::LibTensorFlow::Status }
+  let(:klass) { Roseflow::Tensorflow::Status }
   let(:retaining_klass) { klass.retaining_class }
 
   it "adds a ref if it is a retaining class" do
@@ -36,12 +36,12 @@ RSpec.describe TensorFlow::LibTensorFlow::ManagedPointer do
   describe ".to_native" do
     it "does not accept null pointers" do
       expect { klass.to_native(nil, nil) }.to raise_error(TypeError, /cannot be null/)
-      expect { klass.to_native(TensorFlow::LibTensorFlow::Status.new(null), nil) }.to raise_error(TypeError, /cannot be null/)
+      expect { klass.to_native(Roseflow::Tensorflow::Status.new(null), nil) }.to raise_error(TypeError, /cannot be null/)
     end
 
     it "does not accept pointers of another type" do
-      expect { klass.to_native(pointer, nil) }.to raise_error(TypeError, /expected a kind of TensorFlow::LibTensorFlow::Status/)
-      expect { klass.to_native(TensorFlow::LibTensorFlow::Session.new(pointer), nil) }.to raise_error(TypeError, /expected a kind of TensorFlow::LibTensorFlow::Status/)
+      expect { klass.to_native(pointer, nil) }.to raise_error(TypeError, /expected a kind of Roseflow::Tensorflow::Status/)
+      expect { klass.to_native(Roseflow::Tensorflow::Session.new(pointer), nil) }.to raise_error(TypeError, /expected a kind of Roseflow::Tensorflow::Status/)
     end
 
     it "accepts pointers of the same kind, or a subkind" do
@@ -69,7 +69,7 @@ RSpec.describe TensorFlow::LibTensorFlow::ManagedPointer do
 
   describe ".size" do
     it "returns the size of a pointer" do
-      expect(TensorFlow::LibTensorFlow::ManagedPointer.size).to eq FFI.type_size(:pointer)
+      expect(Roseflow::Tensorflow::ManagedPointer.size).to eq FFI.type_size(:pointer)
     end
   end
 end

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe TensorFlow::LibTensorFlow do
+RSpec.describe Roseflow::Tensorflow do
   context "API" do
     context "Low-level bindings" do
       context "Core functions" do
@@ -42,7 +42,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
 
         context "Creating a graph" do
           it "creates a new graph" do
-            expect(api.new_graph()).to be_a TensorFlow::LibTensorFlow::Graph
+            expect(api.new_graph()).to be_a Roseflow::Tensorflow::Graph
           end
         end
       end
@@ -78,34 +78,34 @@ RSpec.describe TensorFlow::LibTensorFlow do
         context "Operation list" do
           it "returns a list of all operations" do
             result = api.get_all_operations()
-            expect(result).to be_a TensorFlow::LibTensorFlow::Buffer
+            expect(result).to be_a Roseflow::Tensorflow::Buffer
           end
         end
 
         context "Creating an operation" do
           it "creates a new operation" do
-            graph = TensorFlow::LibTensorFlow::API.new_graph()
-            expect(api.new_operation(graph, "Const", "")).to be_a TensorFlow::LibTensorFlow::OperationDescription
+            graph = Roseflow::Tensorflow::API.new_graph()
+            expect(api.new_operation(graph, "Const", "")).to be_a Roseflow::Tensorflow::OperationDescription
           end
         end
 
         context "Get all operations" do
           it "calls C API for all operations" do
             result = api.get_all_operations
-            expect(result).to be_a TensorFlow::LibTensorFlow::Buffer
+            expect(result).to be_a Roseflow::Tensorflow::Buffer
           end
         end
 
         # TODO: This is totally in an experimental phase.
         context "Finish an operation" do
           it "finishes an operation" do
-            graph = TensorFlow::LibTensorFlow::API.new_graph()
+            graph = Roseflow::Tensorflow::API.new_graph()
             description = api.new_operation(graph, "Concat", "c")
             p description.read_string.unpack("Q")
             # array = Numo::Int64.cast([[2,1],[1,2]])
             # pointer = FFI::Pointer.new :int64, array.byte_size
             # pointer.put_array_of_int64 0, array
-            # output = TensorFlow::LibTensorFlow::Output.new(pointer)
+            # output = Roseflow::Tensorflow::Output.new(pointer)
             # p output
             # api.add_input(description, output)
             # status = api.new_status()
@@ -120,7 +120,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
       end
 
       context "Tensors" do
-        TF_INT64 = 10
+        TF_INT64 = Roseflow::Tensorflow::API::enum_value(:dt_int64)
 
         TENSOR_FUNCTIONS = [
           :allocate_tensor,
@@ -149,7 +149,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
               array = Numo::Int64.cast([[2,1],[1,2]])
               pointer = FFI::MemoryPointer.new :int64, array.byte_size
               pointer.put_array_of_int64 0, array
-              expect(api.allocate_tensor(TF_INT64, pointer, array.shape.size, array.byte_size)).to be_a TensorFlow::LibTensorFlow::Tensor
+              expect(api.allocate_tensor(TF_INT64, pointer, array.shape.size, array.byte_size)).to be_a Roseflow::Tensorflow::Tensor
             end
           end
         end
@@ -204,8 +204,8 @@ RSpec.describe TensorFlow::LibTensorFlow do
             pointer = FFI::MemoryPointer.new :int64, array.byte_size
             pointer.put_array_of_int64 0, array
             tensor = api.allocate_tensor(TF_INT64, pointer, array.shape.size, array.byte_size)
-            expect(api.tensor_data(tensor)).to be_a TensorFlow::LibTensorFlow::TensorData
-            expect(tensor.data).to be_a TensorFlow::LibTensorFlow::TensorData
+            expect(api.tensor_data(tensor)).to be_a Roseflow::Tensorflow::TensorData
+            expect(tensor.data).to be_a Roseflow::Tensorflow::TensorData
           end
         end
       end
@@ -221,7 +221,7 @@ RSpec.describe TensorFlow::LibTensorFlow do
       context "Status" do
         context "Creating a new status object" do
           it "creates new status object" do
-            expect(api.new_status()).to be_a TensorFlow::LibTensorFlow::Status
+            expect(api.new_status()).to be_a Roseflow::Tensorflow::Status
           end
         end
 
@@ -283,17 +283,17 @@ RSpec.describe TensorFlow::LibTensorFlow do
         context "Creating a new buffer" do
           context "New buffer" do
             it "creates a new buffer" do
-              expect(api.new_buffer).to be_a TensorFlow::LibTensorFlow::Buffer
+              expect(api.new_buffer).to be_a Roseflow::Tensorflow::Buffer
             end
           end
 
           context "New buffer from string" do
             it "creates a new buffer from string" do
-              expect(api.new_buffer_from_string("Hello", 5)).to be_a TensorFlow::LibTensorFlow::Buffer
+              expect(api.new_buffer_from_string("Hello", 5)).to be_a Roseflow::Tensorflow::Buffer
             end
 
             it "requires an appropriate length for the buffer" do
-              expect(api.new_buffer_from_string("Yeah", 2)).to be_a TensorFlow::LibTensorFlow::Buffer
+              expect(api.new_buffer_from_string("Yeah", 2)).to be_a Roseflow::Tensorflow::Buffer
             end
           end
         end
