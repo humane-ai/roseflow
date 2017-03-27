@@ -2,7 +2,7 @@ require "simplecov"
 SimpleCov.start
 
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
-require "tensorflow"
+require "roseflow"
 require "factory_girl"
 
 RSpec.configure do |config|
@@ -13,7 +13,7 @@ RSpec.configure do |config|
   end
 
   def api
-    TensorFlow::LibTensorFlow::API
+    Roseflow::Tensorflow::API
   end
 
   def fixture_path

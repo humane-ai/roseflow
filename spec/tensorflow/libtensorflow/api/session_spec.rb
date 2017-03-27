@@ -9,7 +9,7 @@ RSpec.describe "TensorFlow API Session functions" do
 
     it "creates a new session" do
       status = api.new_status()
-      expect(api.new_session(graph, options, status)).to be_a TensorFlow::LibTensorFlow::Session
+      expect(api.new_session(graph, options, status)).to be_a Roseflow::Tensorflow::Session
       expect(status.code).to eq :ok
     end
   end
@@ -60,7 +60,7 @@ RSpec.describe "TensorFlow API Session functions" do
     let(:graph_def) do
       graph_file = File.read(fixture_path + "/graph/regression_simplified.pb")
       pointer = graph_file_to_pointer(graph_file)
-      buffer = TensorFlow::LibTensorFlow::Structs::Buffer.new
+      buffer = Roseflow::Tensorflow::Structs::Buffer.new
       buffer[:data] = pointer
       buffer[:length] = pointer.size
       buffer
@@ -74,10 +74,10 @@ RSpec.describe "TensorFlow API Session functions" do
       expect(status.code).to eq :ok
       status = api.new_status()
       run_options = api.new_buffer()
-      # inputs = TensorFlow::LibTensorFlow::Structs::Output.new
-      # input_values = TensorFlow::LibTensorFlow::Structs::Tensor.new
-      # outputs = TensorFlow::LibTensorFlow::Structs::Output.new
-      # output_values = TensorFlow::LibTensorFlow::Structs::Tensor.new
+      # inputs = Roseflow::Tensorflow::Structs::Output.new
+      # input_values = Roseflow::Tensorflow::Structs::Tensor.new
+      # outputs = Roseflow::Tensorflow::Structs::Output.new
+      # output_values = Roseflow::Tensorflow::Structs::Tensor.new
       inputs = FFI::Pointer::NULL
       input_values = FFI::Pointer::NULL
       outputs = FFI::Pointer::NULL
@@ -93,7 +93,7 @@ RSpec.describe "TensorFlow API Session functions" do
   context "Session options" do
     context "Creating session options" do
       it "can create new session options" do
-        expect(api.new_session_options()).to be_a TensorFlow::LibTensorFlow::SessionOptions
+        expect(api.new_session_options()).to be_a Roseflow::Tensorflow::SessionOptions
       end
     end
 

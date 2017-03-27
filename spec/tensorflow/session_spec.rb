@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe TensorFlow::Session do
+RSpec.describe Roseflow::Session do
   describe "Initialization" do
     subject(:subject) { described_class.new }
 
@@ -22,7 +22,7 @@ RSpec.describe TensorFlow::Session do
       it "opens a new active session to TensorFlow" do
         expect(subject.connect).to eq true
         expect(subject).to be_connected
-        expect(subject.session).to be_a TensorFlow::LibTensorFlow::Session
+        expect(subject.session).to be_a Roseflow::Tensorflow::Session
       end
     end
   end

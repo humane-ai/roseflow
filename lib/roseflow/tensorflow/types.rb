@@ -1,0 +1,20 @@
+require "roseflow/tensorflow/managed_pointer"
+require "roseflow/tensorflow/types/buffer"
+require "roseflow/tensorflow/types/code"
+require "roseflow/tensorflow/types/data_type"
+require "roseflow/tensorflow/types/graph"
+require "roseflow/tensorflow/types/library"
+require "roseflow/tensorflow/types/operation"
+require "roseflow/tensorflow/types/operation_description"
+require "roseflow/tensorflow/types/operation_input"
+require "roseflow/tensorflow/types/operation_metadata"
+require "roseflow/tensorflow/types/output"
+require "roseflow/tensorflow/types/session"
+require "roseflow/tensorflow/types/session_config"
+require "roseflow/tensorflow/types/session_options"
+require "roseflow/tensorflow/types/status"
+require "roseflow/tensorflow/types/tensor"
+require "roseflow/tensorflow/types/tensor_data"
+
+module Roseflow::Tensorflow
+end

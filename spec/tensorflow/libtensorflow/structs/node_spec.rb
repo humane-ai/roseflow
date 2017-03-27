@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe TensorFlow::LibTensorFlow::Structs::Node do
+RSpec.describe Roseflow::Tensorflow::Structs::Node do
   context "with null pointer" do
     subject(:subject) { described_class.new(FFI::Pointer::NULL) }
 
@@ -34,11 +34,11 @@ RSpec.describe TensorFlow::LibTensorFlow::Structs::Node do
 
   context "with a filled struct pointer" do
     let(:nodedef) do
-      shape = TensorFlow::LibTensorFlow::Protobuf::TensorShapeProto.new
-      tensor = TensorFlow::LibTensorFlow::Protobuf::TensorProto.new(float_val: [5.0], dtype: TensorFlow::LibTensorFlow::Protobuf::DataType::DT_FLOAT, tensor_shape: shape)
-      attrvalue = TensorFlow::LibTensorFlow::Protobuf::AttrValue.new(tensor: tensor)
-      nodedef = TensorFlow::LibTensorFlow::Protobuf::NodeDef.new(name: "a/initial_value", op: "Const")
-      nodedef.attr["dtype"] = TensorFlow::LibTensorFlow::Protobuf::AttrValue.new(type: TensorFlow::LibTensorFlow::Protobuf::DataType::DT_FLOAT)
+      shape = Roseflow::Tensorflow::Protobuf::TensorShapeProto.new
+      tensor = Roseflow::Tensorflow::Protobuf::TensorProto.new(float_val: [5.0], dtype: Roseflow::Tensorflow::Protobuf::DataType::DT_FLOAT, tensor_shape: shape)
+      attrvalue = Roseflow::Tensorflow::Protobuf::AttrValue.new(tensor: tensor)
+      nodedef = Roseflow::Tensorflow::Protobuf::NodeDef.new(name: "a/initial_value", op: "Const")
+      nodedef.attr["dtype"] = Roseflow::Tensorflow::Protobuf::AttrValue.new(type: Roseflow::Tensorflow::Protobuf::DataType::DT_FLOAT)
       nodedef.attr["value"] = attrvalue
       nodedef
     end
@@ -85,7 +85,7 @@ RSpec.describe TensorFlow::LibTensorFlow::Structs::Node do
 
     context "NodeDef as protobuf" do
       let(:json) { File.read(fixture_path + "/operation/const_variable.json") }
-      let(:protobuf_class) { ::TensorFlow::LibTensorFlow::Protobuf::NodeDef }
+      let(:protobuf_class) { ::Roseflow::Tensorflow::Protobuf::NodeDef }
       let(:protobuf) { ::Google::Protobuf.decode_json(protobuf_class, json) }
 
       subject(:subject) { described_class.new }

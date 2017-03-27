@@ -1,11 +1,11 @@
 require "spec_helper"
 
-RSpec.describe TensorFlow::LibTensorFlow::UTF8String do
+RSpec.describe Roseflow::Tensorflow::UTF8String do
   module C
     extend FFI::Library
     ffi_lib [FFI::CURRENT_PROCESS, 'c']
 
-    attach_function :strncpy, [ :pointer, TensorFlow::LibTensorFlow::UTF8String, :size_t ], TensorFlow::LibTensorFlow::UTF8String
+    attach_function :strncpy, [ :pointer, Roseflow::Tensorflow::UTF8String, :size_t ], Roseflow::Tensorflow::UTF8String
   end
 
   let(:char) do

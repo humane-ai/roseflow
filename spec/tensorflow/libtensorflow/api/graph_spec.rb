@@ -6,7 +6,7 @@ RSpec.describe "TensorFlow API Graph functions" do
   let(:graph_def) do
     graph_file = File.read(fixture_path + "/graph/graph.pb")
     pointer = graph_file_to_pointer(graph_file)
-    buffer = TensorFlow::LibTensorFlow::Structs::Buffer.new
+    buffer = Roseflow::Tensorflow::Structs::Buffer.new
     buffer[:data] = pointer
     buffer[:length] = pointer.size
     buffer
@@ -32,7 +32,7 @@ RSpec.describe "TensorFlow API Graph functions" do
       api.load_graph_from_graph_definition(graph, graph_def.to_ptr, options, status)
       expect(status.code).to eq :ok
       operation = api.graph_operation_by_name(graph, "a")
-      expect(operation).to be_a TensorFlow::LibTensorFlow::Operation
+      expect(operation).to be_a Roseflow::Tensorflow::Operation
     end
 
     it "does not return an operation if there's no operation with given name" do

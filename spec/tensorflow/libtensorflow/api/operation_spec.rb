@@ -6,16 +6,16 @@ RSpec.describe "TensorFlow API Operation functions" do
   context "Adding a new operation" do
     context "Const operation" do
       let(:json) { File.read(fixture_path + "/operation/const_variable.json") }
-      let(:protobuf_class) { ::TensorFlow::LibTensorFlow::Protobuf::NodeDef }
+      let(:protobuf_class) { ::Roseflow::Tensorflow::Protobuf::NodeDef }
       let(:nodedef) { ::Google::Protobuf.decode_json(protobuf_class, json) }
       let(:dtype) { nodedef.attr["dtype"] }
       let(:value) { nodedef.attr["value"] }
 
       # TODO: Validate that data type and tensor shape are correct
       it "creates a new operation" do
-        graph = TensorFlow::LibTensorFlow::API.new_graph()
+        graph = Roseflow::Tensorflow::API.new_graph()
         description = api.new_operation(graph, "Const", "Variable/initial_variable")
-        expect(description).to be_a TensorFlow::LibTensorFlow::OperationDescription
+        expect(description).to be_a Roseflow::Tensorflow::OperationDescription
         status = api.new_status()
         expect(api.set_attribute_value_proto(description, "dtype", pointer_to(dtype, :float), dtype.to_proto.length, status)).to be_nil
         expect(status.code).to eq :ok
@@ -24,7 +24,7 @@ RSpec.describe "TensorFlow API Operation functions" do
         expect(status.code).to eq :ok
         status = api.new_status()
         operation = api.finish_operation(description, status)
-        expect(operation).to be_a TensorFlow::LibTensorFlow::Operation
+        expect(operation).to be_a Roseflow::Tensorflow::Operation
         expect(status.code).to eq :ok
         expect(api.operation_name(operation)).to eq "Variable/initial_variable"
         expect(api.operation_type(operation)).to eq "Const"
@@ -34,7 +34,7 @@ RSpec.describe "TensorFlow API Operation functions" do
 
     context "Placeholder operation" do
       let(:json) { File.read(fixture_path + "/operation/placeholder.json") }
-      let(:protobuf_class) { ::TensorFlow::LibTensorFlow::Protobuf::NodeDef }
+      let(:protobuf_class) { ::Roseflow::Tensorflow::Protobuf::NodeDef }
       let(:nodedef) { ::Google::Protobuf.decode_json(protobuf_class, json) }
       let(:dtype) { nodedef.attr["dtype"] }
       let(:shape) { nodedef.attr["shape"] }
@@ -49,15 +49,15 @@ RSpec.describe "TensorFlow API Operation functions" do
         expect(api.set_attribute_value_proto(description, "shape", pointer_to(shape, :float), shape.to_proto.length, status)).to be_nil
         expect(status.code).to eq :ok
         operation = api.finish_operation(description, status)
-        expect(operation).to be_a TensorFlow::LibTensorFlow::Operation
+        expect(operation).to be_a Roseflow::Tensorflow::Operation
         expect(status.code).to eq :ok
         expect(api.operation_name(operation)).to eq "MyPlaceholder"
         expect(api.operation_type(operation)).to eq "Placeholder"
-        expect(api.graph_operation_by_name(graph, "MyPlaceholder")).to be_a TensorFlow::LibTensorFlow::Operation
+        expect(api.graph_operation_by_name(graph, "MyPlaceholder")).to be_a Roseflow::Tensorflow::Operation
         # buffer = api.new_buffer()
         # api.operation_get_attribute_tensor_shape_proto(operation, "shape", buffer, status)
         # expect(status.code).to eq :ok
-        # p ::Google::Protobuf.decode(TensorFlow::LibTensorFlow::Protobuf::TensorShapeProto, buffer.read_string)
+        # p ::Google::Protobuf.decode(Roseflow::Tensorflow::Protobuf::TensorShapeProto, buffer.read_string)
       end
     end
   end
@@ -66,7 +66,7 @@ RSpec.describe "TensorFlow API Operation functions" do
     it "creates a placeholder operation" do
       graph = api.new_graph()
       status = api.new_status()
-      expect(api.new_operation(graph, "Placeholder", "")).to be_a TensorFlow::LibTensorFlow::OperationDescription
+      expect(api.new_operation(graph, "Placeholder", "")).to be_a Roseflow::Tensorflow::OperationDescription
       expect(status.code).to eq :ok
     end
   end
@@ -76,7 +76,7 @@ RSpec.describe "TensorFlow API Operation functions" do
     let(:graph_def) do
       graph_file = File.read(fixture_path + "/graph/graph.pb")
       pointer = graph_file_to_pointer(graph_file)
-      buffer = TensorFlow::LibTensorFlow::Structs::Buffer.new
+      buffer = Roseflow::Tensorflow::Structs::Buffer.new
       buffer[:data] = pointer
       buffer[:length] = pointer.size
       buffer
@@ -88,43 +88,43 @@ RSpec.describe "TensorFlow API Operation functions" do
       api.load_graph_from_graph_definition(graph, graph_def.to_ptr, options, status)
       expect(status.code).to eq :ok
       operation = api.graph_operation_by_name(graph, "a")
-      expect(operation).to be_a TensorFlow::LibTensorFlow::Operation
+      expect(operation).to be_a Roseflow::Tensorflow::Operation
       buffer = api.new_buffer()
       p buffer.read_string
       status = api.new_status()
       expect(api.operation_to_node_def(operation, buffer, status)).to be_nil
       expect(status.code).to eq :ok
       returning = api.get_buffer(buffer)
-      expect(returning).to be_a TensorFlow::LibTensorFlow::Buffer
+      expect(returning).to be_a Roseflow::Tensorflow::Buffer
       p string = returning.read_string
-      p Google::Protobuf.decode(TensorFlow::LibTensorFlow::Protobuf::NodeDef, string)
+      p Google::Protobuf.decode(Roseflow::Tensorflow::Protobuf::NodeDef, string)
     end
   end
 
   # TODO: WIP.
   context "Operation type", skip: "FIXME" do
     it "returns the type of the operation" do
-      graph = TensorFlow::LibTensorFlow::API.new_graph()
+      graph = Roseflow::Tensorflow::API.new_graph()
       operation = api.new_operation(graph, "Const", "")
-      expect(operation).to be_a TensorFlow::LibTensorFlow::OperationDescription
-      # tensor = TensorFlow::LibTensorFlow::Protobuf::TensorProto.new(tensor_content: "Hello!", dtype: TensorFlow::LibTensorFlow::Protobuf::DataType::DT_STRING)
-      shape = TensorFlow::LibTensorFlow::Protobuf::TensorShapeProto.new
-      tensor = TensorFlow::LibTensorFlow::Protobuf::TensorProto.new(float_val: [5.0], dtype: TensorFlow::LibTensorFlow::Protobuf::DataType::DT_FLOAT, tensor_shape: shape)
-      attrvalue = TensorFlow::LibTensorFlow::Protobuf::AttrValue.new(tensor: tensor)
-      nodedef = TensorFlow::LibTensorFlow::Protobuf::NodeDef.new(name: "a/initial_value", op: "Const")
-      nodedef.attr["dtype"] = TensorFlow::LibTensorFlow::Protobuf::AttrValue.new(type: TensorFlow::LibTensorFlow::Protobuf::DataType::DT_FLOAT)
+      expect(operation).to be_a Roseflow::Tensorflow::OperationDescription
+      # tensor = Roseflow::Tensorflow::Protobuf::TensorProto.new(tensor_content: "Hello!", dtype: Roseflow::Tensorflow::Protobuf::DataType::DT_STRING)
+      shape = Roseflow::Tensorflow::Protobuf::TensorShapeProto.new
+      tensor = Roseflow::Tensorflow::Protobuf::TensorProto.new(float_val: [5.0], dtype: Roseflow::Tensorflow::Protobuf::DataType::DT_FLOAT, tensor_shape: shape)
+      attrvalue = Roseflow::Tensorflow::Protobuf::AttrValue.new(tensor: tensor)
+      nodedef = Roseflow::Tensorflow::Protobuf::NodeDef.new(name: "a/initial_value", op: "Const")
+      nodedef.attr["dtype"] = Roseflow::Tensorflow::Protobuf::AttrValue.new(type: Roseflow::Tensorflow::Protobuf::DataType::DT_FLOAT)
       nodedef.attr["value"] = attrvalue
       p nodedef
-      node = TensorFlow::LibTensorFlow::Structs::Operation.new
-      struct = TensorFlow::LibTensorFlow::Structs::Node.new
+      node = Roseflow::Tensorflow::Structs::Operation.new
+      struct = Roseflow::Tensorflow::Structs::Node.new
       struct[:data] = FFI::MemoryPointer.new(nodedef.to_proto)
       node[:node] = struct
-      output = TensorFlow::LibTensorFlow::Structs::Output.new
+      output = Roseflow::Tensorflow::Structs::Output.new
       output[:oper] = node
       output[:index] = 0
-      # ptr = TensorFlow::LibTensorFlow::Output.new(output)
+      # ptr = Roseflow::Tensorflow::Output.new(output)
       status = api.new_status()
-      # api.set_attribute_type(operation, "Const", TensorFlow::LibTensorFlow::Protobuf::DataType::DT_FLOAT)
+      # api.set_attribute_type(operation, "Const", Roseflow::Tensorflow::Protobuf::DataType::DT_FLOAT)
       result = api.add_input(operation, output)
       # api.set_attribute_type(operation, "dtype", 7)
       p status.code
@@ -138,7 +138,7 @@ RSpec.describe "TensorFlow API Operation functions" do
       result = api.finish_operation(operation, status)
       p status.code
       p status.message
-      expect(result).to be_a TensorFlow::LibTensorFlow::Operation
+      expect(result).to be_a Roseflow::Tensorflow::Operation
     end
   end
 

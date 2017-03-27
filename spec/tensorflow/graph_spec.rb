@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe TensorFlow::Graph do
+RSpec.describe Roseflow::Graph do
   context "Initializing a graph" do
 
   end
@@ -48,7 +48,7 @@ RSpec.describe TensorFlow::Graph do
           expect(subject.nodes).to be_a Array
           expect(subject.nodes.count).to eq 13
           subject.nodes.each do |node|
-            expect(node).to be_a TensorFlow::Node
+            expect(node).to be_a Roseflow::Node
           end
         end
 
@@ -124,7 +124,7 @@ RSpec.describe TensorFlow::Graph do
         end
 
         it "fails with JSONValidationError when JSON does not contain necessary elements", skip: "Requires implementation of JSON validator" do
-          expect{ json_action }.to raise_error(TensorFlow::Errors::JSONValidationError)
+          expect{ json_action }.to raise_error(Roseflow::Errors::JSONValidationError)
         end
       end
     end

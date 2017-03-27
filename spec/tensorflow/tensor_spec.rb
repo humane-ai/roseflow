@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe TensorFlow::Tensor do
+RSpec.describe Roseflow::Tensor do
   context "Initialization" do
     context "Types" do
       supported_types = {
@@ -14,7 +14,7 @@ RSpec.describe TensorFlow::Tensor do
           subject(:subject) { described_class.new(value, type) }
 
           it "initializes a tensor with correct type and type settings" do
-            expect(subject).to be_a TensorFlow::Tensor
+            expect(subject).to be_a Roseflow::Tensor
           end
 
           it "does not raise an error" do

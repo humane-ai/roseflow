@@ -1,8 +1,8 @@
 require "spec_helper"
 
-RSpec.describe TensorFlow::LibTensorFlow::Utility do
+RSpec.describe Roseflow::Tensorflow::Utility do
   context "Determining shape of a value" do
-    let(:dummy) { Class.new { extend TensorFlow::LibTensorFlow::Utility } }
+    let(:dummy) { Class.new { extend Roseflow::Tensorflow::Utility } }
 
     subject(:multi_dimensional) { dummy.shape_of([[2], [4]]) }
     subject(:single_dimensional) { dummy.shape_of([1, 2]) }

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe TensorFlow::Node do
+RSpec.describe Roseflow::Node do
   describe "Class methods" do
     describe ".from_nodedef(definition)" do
       let(:definition) { described_class::PROTOBUF_CLASS.new }

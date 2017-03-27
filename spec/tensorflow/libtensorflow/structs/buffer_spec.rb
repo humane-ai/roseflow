@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe TensorFlow::LibTensorFlow::Structs::Buffer do
+RSpec.describe Roseflow::Tensorflow::Structs::Buffer do
   context "with null pointer" do
     subject(:subject) { described_class.new(FFI::Pointer::NULL) }
 

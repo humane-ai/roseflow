@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe TensorFlow::LibTensorFlow::Structs::Output do
+RSpec.describe Roseflow::Tensorflow::Structs::Output do
   context "with null pointer" do
     subject(:subject) { described_class.new(FFI::Pointer::NULL) }
 
@@ -28,7 +28,7 @@ RSpec.describe TensorFlow::LibTensorFlow::Structs::Output do
     end
 
     specify do
-      expect(subject[:oper]).to be_a TensorFlow::LibTensorFlow::Structs::Operation
+      expect(subject[:oper]).to be_a Roseflow::Tensorflow::Structs::Operation
     end
   end
 
@@ -54,7 +54,7 @@ RSpec.describe TensorFlow::LibTensorFlow::Structs::Output do
     subject(:subject) { described_class.new(memory.pointer) }
 
     it "has data" do
-      expect(subject[:oper]).to be_a TensorFlow::LibTensorFlow::Structs::Operation
+      expect(subject[:oper]).to be_a Roseflow::Tensorflow::Structs::Operation
       expect(subject[:index]).to eq 0
     end
   end
