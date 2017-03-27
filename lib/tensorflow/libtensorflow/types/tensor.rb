@@ -3,7 +3,7 @@ module TensorFlow::LibTensorFlow
     class << self
       def to_native(value, ctx)
         attr_value = TensorFlow::LibTensorFlow::Protobuf::AttrValue.new
-        attr_value.tensor = value
+        attr_value.tensor = value.to_tensor_proto
         attr_value.type = TensorFlow::LibTensorFlow::Protobuf::DataType::DT_STRING
         attr_value.to_proto
         # TensorFlow::LibTensorFlow::Protobuf::AttrValue.new(tensor: value, dtype: TensorFlow::LibTensorFlow::Protobuf::DataType::DT_STRING).to_proto

@@ -8,14 +8,13 @@ module TensorFlow::LibTensorFlow
 
     ffi_lib TensorFlow::LibTensorFlow::LIB_SO_NAMES
 
-    enum :data_type,  [ :dt_float, 1,
+    enum :data_type,  [ 0, :dt_float,
                         :dt_double,
                         :dt_int32,
                         :dt_uint8,
                         :dt_int16,
                         :dt_int8,
                         :dt_string,
-                        :dt_complex64,
                         :dt_complex,
                         :dt_int64,
                         :dt_bool,

@@ -55,7 +55,7 @@ module TensorFlow::LibTensorFlow
       run_session: {
         name: "TF_SessionRun",
         returns: :void,
-        options: [ :session, :buffer, :output, Tensor, :int, :output, Tensor, :int, Operation, :int, :buffer, Status ]
+        options: [ :session, :buffer, Structs::Output.by_ref, Tensor, :int, Structs::Output.by_ref, Tensor, :int, :pointer, :int, :buffer, Status ]
       },
       set_config: {
         name: "TF_SetConfig",

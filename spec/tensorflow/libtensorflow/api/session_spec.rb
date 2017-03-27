@@ -74,14 +74,18 @@ RSpec.describe "TensorFlow API Session functions" do
       expect(status.code).to eq :ok
       status = api.new_status()
       run_options = api.new_buffer()
-      inputs = TensorFlow::LibTensorFlow::Output.new
-      input_values = []
-      outputs = []
-      output_values = []
-      operations = []
+      # inputs = TensorFlow::LibTensorFlow::Structs::Output.new
+      # input_values = TensorFlow::LibTensorFlow::Structs::Tensor.new
+      # outputs = TensorFlow::LibTensorFlow::Structs::Output.new
+      # output_values = TensorFlow::LibTensorFlow::Structs::Tensor.new
+      inputs = FFI::Pointer::NULL
+      input_values = FFI::Pointer::NULL
+      outputs = FFI::Pointer::NULL
+      output_values = FFI::Pointer::NULL
+      operations = FFI::Pointer::NULL
       targets = []
       run_metadata = api.new_buffer()
-      api.run_session(session, run_options, inputs.to_ptr, input_values, 1, outputs, output_values, 1, operations, targets.count, run_metadata, status)
+      api.run_session(session, run_options, inputs, input_values, 1, outputs, output_values, 1, operations, targets.count, run_metadata, status)
       expect(status.code).to eq :ok
     end
   end
