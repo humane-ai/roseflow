@@ -1,6 +1,10 @@
 require "roseflow/tensorflow"
 
 module Roseflow
+  # Session is a class for running TensorFlow operations.
+
+  # A Session object encapsulates the environment in which Operation objects are
+  # executed, and Tensor objects are evaluated.
   class Session
     attr_reader :session
     attr_reader :session_options

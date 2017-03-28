@@ -147,6 +147,7 @@ RSpec.describe Roseflow::Graph do
       end
 
       context "Graph with nodes" do
+        let(:graph) { described_class.new }
 
       end
 
