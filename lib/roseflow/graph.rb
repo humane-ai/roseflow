@@ -2,11 +2,11 @@ require "roseflow/tensorflow"
 require "roseflow/tensorflow/protobuf"
 
 module Roseflow
-  module Errors
-    class JSONValidationError < StandardError
-    end
-  end
-
+  # Graph is a TensorFlow computation, represented as a dataflow graph.
+  #
+  # A graph contains a set of Operation objects, which represent units of
+  # computation; and Tensor objects, which represent the units of data that
+  # flow between operations.
   class Graph
     PROTOBUF_CLASS = ::Roseflow::Tensorflow::Protobuf::GraphDef
 
@@ -29,24 +29,28 @@ module Roseflow
       @name = value
     end
 
-    def from_json(json)
+    # Load a graph definition from JSON and convert to nodes and operations
+    def definition_from_json(json)
       @definition = ::Google::Protobuf.decode_json(PROTOBUF_CLASS, json)
-      convert_to_nodes
+      convert_definition_to_nodes
     end
 
-    def from_file(file)
+    # Load a graph definition from a file and convert to nodes and operations
+    def definition_from_file(file)
       @definition = ::Google::Protobuf.decode(PROTOBUF_CLASS, file.read)
-      convert_to_nodes
+      convert_definition_to_nodes
     ensure
       file.close
     end
 
-    def convert_to_nodes
+    # Converts protobuf definition to nodes and operations
+    def convert_definition_to_nodes
       definition.node.each do |node|
         @nodes << Node.from_nodedef(node)
       end
     end
 
+    # Converts current graph into a protobuf definition
     def to_graphdef
       PROTOBUF_CLASS.new
     end

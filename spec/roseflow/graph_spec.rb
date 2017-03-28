@@ -41,7 +41,7 @@ RSpec.describe Roseflow::Graph do
         let(:json) { File.read(fixture_path + "/graph/json/regression.json") }
 
         before do
-          subject.from_json(json)
+          subject.definition_from_json(json)
         end
 
         it "returns the nodes of the graph" do
@@ -74,7 +74,7 @@ RSpec.describe Roseflow::Graph do
         let(:file) { File.open(fixture_path + "/graph/regression_simplified.pb", "r") }
         let(:graph) { described_class.new }
 
-        subject(:subject) { graph.from_file(file) }
+        subject(:subject) { graph.definition_from_file(file) }
 
         it "loads graph definition from protobuf file" do
           expect(subject).to be_truthy
@@ -88,7 +88,7 @@ RSpec.describe Roseflow::Graph do
         let(:file) { File.open(fixture_path + "/graph/graph_multi_dim.pbtxt", "r") }
         let(:graph) { described_class.new }
 
-        subject(:subject) { graph.from_file(file) }
+        subject(:subject) { graph.definition_from_file(file) }
 
         it "fails to load files that are not protobuf binaries" do
           expect{ subject }.to raise_error(Google::Protobuf::ParseError).with_message(/Invalid wire type/)
@@ -101,7 +101,7 @@ RSpec.describe Roseflow::Graph do
         let(:json) { File.read(fixture_path + "/graph/json/regression.json") }
         let(:graph) { described_class.new }
 
-        subject(:subject) { graph.from_json(json) }
+        subject(:subject) { graph.definition_from_json(json) }
 
         it "loads graph definition from JSON" do
           expect(subject).to be_truthy
@@ -116,8 +116,8 @@ RSpec.describe Roseflow::Graph do
         let(:json) { { "foo": "bar" } }
         let(:graph) { described_class.new }
 
-        subject(:string_action) { graph.from_json(string) }
-        subject(:json_action) { graph.from_json(json) }
+        subject(:string_action) { graph.definition_from_json(string) }
+        subject(:json_action) { graph.definition_from_json(json) }
 
         it "fails with appropriate error when input is not JSON" do
           expect{ string_action }.to raise_error(Google::Protobuf::ParseError)

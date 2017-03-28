@@ -52,25 +52,66 @@ RSpec.describe Roseflow::Tensor do
           expect(tensor.shape).to eq [1, 3]
         end
 
+        it "sets the rank of the tensor" do
+          expect(tensor.rank).to eq 2
+        end
+
         context "Deeper structures" do
-          values = [
-            [[1,2,3],[1,2,3]],
-            Numo::DFloat.new(2,3,3)
-          ]
+          let(:first) { [[1,2,3],[1,2,3]] }
+          let(:second) { Numo::DFloat.new(2,3,3) }
+          let(:third) { [[[2,3,4],[2,3,4],[2,3,4]],[[2,3,4],[2,3,4],[2,3,4]]] }
 
-          values.each do |value|
-            let(:tensor) { described_class.new(value, :float) }
+          let(:first_tensor) { described_class.new(first, :float) }
+          let(:second_tensor) { described_class.new(second, :float) }
+          let(:third_tensor) { described_class.new(third, :float) }
 
-            it "sets the shape of the tensor" do
-              p value
-              if value.is_a?(Array)
-                expect(tensor.shape).to eq [2,3]
-              end
-              if value.is_a?(Numo::NArray)
-                expect(tensor.shape).to eq [2,3,3]
-              end
-            end
+          it "sets the shape of the tensor" do
+            expect(first_tensor.shape).to eq [2,3]
+            expect(second_tensor.shape).to eq [2,3,3]
+            expect(third_tensor.shape).to eq [2,3,3]
           end
+
+          it "sets the rank of the tensor" do
+            expect(first_tensor.rank).to eq 2
+            expect(second_tensor.rank).to eq 3
+            expect(third_tensor.rank).to eq 3
+          end
+        end
+      end
+    end
+  end
+
+  describe "Methods" do
+    describe "#shape_of(value)" do
+      context "Strings" do
+        subject(:subject) { described_class.shape_of("String") }
+
+        it "returns an empty array" do
+          expect(subject).to eq []
+        end
+      end
+
+      context "1-D arrays" do
+        subject(:subject) { described_class.shape_of([1,2,3]) }
+
+        it "returns correct shape" do
+          expect(subject).to eq [3]
+        end
+      end
+
+      context "2-D arrays" do
+        subject(:subject) { described_class.shape_of([[1,2],[1,2]]) }
+
+        it "returns correct shape" do
+          expect(subject).to eq [2,2]
+        end
+      end
+
+      context "n-D arrays" do
+        subject(:subject) { described_class.shape_of([[[2,3,4],[2,3,4],[2,3,4]],[[2,3,4],[2,3,4],[2,3,4]]]) }
+
+        it "returns correct shape" do
+          expect(subject).to eq [2,3,3]
         end
       end
     end

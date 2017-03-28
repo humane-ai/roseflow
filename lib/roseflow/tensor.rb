@@ -1,4 +1,18 @@
 module Roseflow
+  # Tensor is an n-dimensional array or list which represents one of the outputs
+  # of an Operation.
+  #
+  # A Tensor is a symbolic handle to one of the outputs of an Operation. It does
+  # not hold the values of that operation's output, but instead provides a means
+  # of computing those values in a TensorFlow session.
+  #
+  # This class has two primary purposes:
+  #
+  # - A Tensor can be passed as an input to another Operation. This builds a
+  #   dataflow connection between operations, which enables TensorFlow to execute
+  #   an entire Graph that represents a large, multi-step computation.
+  # - After the graph has been launched in a session, the value of the Tensor can
+  #   be computed by passing it to Session.
   class Tensor
     TYPEMAP = {
       float:    [ Roseflow::Tensorflow::API::enum_value(:dt_float), 8, Float, Numo::DFloat ],
@@ -10,6 +24,7 @@ module Roseflow
     }
 
     attr_reader :shape
+    attr_reader :rank
 
     def initialize(value, type = nil)
       validate_type(type)
@@ -31,11 +46,13 @@ module Roseflow
       if value.is_a?(Numo::NArray)
         @shape = value.shape
       elsif value.is_a?(Array)
-        array = narray_class(type).new(value.size, value.first.size)
-        @shape = array.shape
+        shape = self.class.shape_of(value)
+        @shape = narray_class(type).new(*shape).shape
       else
         @shape = []
       end
+
+      @rank = @shape.size
     end
 
     def supported_type?(type)
@@ -44,6 +61,19 @@ module Roseflow
 
     def narray_class(type)
       TYPEMAP[type].last
+    end
+
+    def self.shape_of(value)
+      if value.is_a?(Array)
+        if value.any? { |ele| ele.is_a?(Array) }
+          dim = value.group_by { |ele| ele.is_a?(Array) && shape_of(ele) }.keys
+          [value.size] + dim.first if dim.size == 1 && dim.first
+        else
+          [value.size]
+        end
+      else
+        []
+      end
     end
   end
 end
