@@ -43,6 +43,15 @@ module Roseflow
       @graph ||= api.new_graph()
     end
 
+    def graph=(input_graph)
+      proto = input_graph.to_proto
+      pointer = graphdef_proto_to_pointer(proto)
+      graphdef = graphdef_pointer_to_buffer(pointer)
+      status = api.new_status()
+      api.load_graph_from_graph_definition(@graph, graphdef, @options, status)
+      status.code
+    end
+
     def options
       @options ||= begin
         options = api.new_session_options()
@@ -64,6 +73,22 @@ module Roseflow
 
     def api
       Roseflow::Tensorflow::API
+    end
+
+    private
+
+    def graphdef_proto_to_pointer(proto)
+      byte_count = proto.unpack("C*").size
+      pointer = FFI::MemoryPointer.new(:char, byte_count)
+      pointer.put_bytes(0, proto, 0, byte_count)
+      pointer
+    end
+
+    def graphdef_pointer_to_buffer(pointer)
+      buffer = Roseflow::Tensorflow::Structs::Buffer.new
+      buffer[:data] = pointer
+      buffer[:length] = pointer.size
+      buffer
     end
   end
 end

@@ -23,6 +23,8 @@
 module Roseflow
 end
 
+require "active_support"
+require "active_support/all"
 require "numo/narray"
 require "roseflow/libc"
 require "roseflow/graph"

@@ -7,31 +7,40 @@ RSpec.describe Roseflow::Node do
     describe ".from_nodedef(definition)" do
       context "Simple definition" do
         let(:definition) { described_class::PROTOBUF_CLASS.new(name: "Variable/initial_value", op: "Const") }
-
-        subject(:subject) { described_class.from_nodedef(definition) }
+        let(:node) { described_class.from_nodedef(definition) }
 
         it "instantiates a new Node from node definition" do
-          expect(subject).to be_a described_class
-          expect(subject.name).to eq definition.name
-          expect(subject.op).to eq definition.op
-          expect(subject.input).to eq definition.input
-          expect(subject.device).to eq definition.device
-          expect(subject.attr).to eq definition.attr
+          expect(node).to be_a described_class
+          expect(node.name).to eq definition.name
+          expect(node.op).to eq definition.op
+          expect(node.input).to eq definition.input
+          expect(node.device).to eq definition.device
+          expect(node.attr).to eq definition.attr
         end
       end
 
       context "Complex definitions" do
+        let(:graph_definition) { graph_definition_from_json(Roseflow::Graph::PROTOBUF_CLASS, "regression.json") }
+
         context "definition with inputs" do
-          let(:graph_definition) { graph_definition_from_json(Roseflow::Graph::PROTOBUF_CLASS, "regression.json") }
           let(:node_definition) { graph_definition.node.select{ |node| node.op == "Mul" }.first }
 
-          subject(:subject) { described_class.from_nodedef(node_definition) }
+          let(:node) { described_class.from_nodedef(node_definition) }
 
           it "instantiates a new Node from node definition" do
-            expect(subject).to be_a described_class
-            expect(subject.name).to eq node_definition.name
-            expect(subject.input).to eq node_definition.input
-            expect(subject.inputs).to eq node_definition.input
+            expect(node).to be_a described_class
+            expect(node.name).to eq node_definition.name
+            expect(node.input).to eq node_definition.input
+            expect(node.inputs).to eq node_definition.input
+          end
+        end
+
+        context "Data types" do
+          let(:node_definition) { graph_definition.node.select{ |node| node.op == "Placeholder" }.first }
+          let(:node) { described_class.from_nodedef(node_definition) }
+
+          it "can have a data type" do
+            expect(node.data_type).to eq :float
           end
         end
       end

@@ -1,16 +1,28 @@
+require "roseflow/elements/data_type"
+
 module Roseflow
   class Node
     PROTOBUF_CLASS = ::Roseflow::Tensorflow::Protobuf::NodeDef
 
     attr_reader :graph
+    attr_reader :inputs
+    attr_reader :data_type
 
     def initialize(*args)
       if args.any?
-        options = args[0]
+        options = args.fetch(0)
         if options.is_a?(::Hash) && options.keys.include?(:definition)
           @definition = options[:definition]
           # process(@definition)
+          @inputs = options[:definition].input
+          extract_data_type
         end
+      end
+    end
+
+    def extract_data_type
+      if @definition.attr["dtype"]
+        @data_type = Roseflow::Elements::DataType.from_attr(@definition.attr)
       end
     end
 
@@ -18,7 +30,7 @@ module Roseflow
       if [ :name, :op, :input, :device, :attr ].include?(name.to_sym)
         @definition.send(name, *args)
       else
-        super
+        super(name, *args)
       end
     end
 

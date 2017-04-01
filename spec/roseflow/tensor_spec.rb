@@ -82,7 +82,41 @@ RSpec.describe Roseflow::Tensor do
   end
 
   describe "Methods" do
-    describe "#shape_of(value)" do
+    describe "#number_of_elements" do
+      let(:multidim) { described_class.new([[[2,3,4],[2,3,4],[2,3,4]],[[2,3,4],[2,3,4],[2,3,4]]], :float) }
+      let(:tensor) { described_class.new([[1,2,3],[1,2,3]], :float) }
+      let(:flat) { described_class.new([1,2,3], :float) }
+      let(:string) { described_class.new("string", :string) }
+
+      it "returns the number of elements for n-D arrays" do
+        expect(multidim.number_of_elements).to eq 18
+      end
+
+      it "returns the number of elements for 2-D arrays" do
+        expect(tensor.number_of_elements).to eq 6
+      end
+
+      it "returns the number of elements for 1-D arrays" do
+        expect(flat.number_of_elements).to eq 3
+      end
+
+      it "returns the number of elements for strings" do
+        expect(string.number_of_elements).to eq 1
+      end
+    end
+
+    describe ".supported_type?(type)" do
+      supported_types = [ :float, :float64, :int32, :int64, :string, :complex ]
+
+      supported_types.each do |type|
+        it "verifies the type against type map" do
+          expect(described_class::TYPEMAP).to receive(:keys).and_return([type])
+          expect(described_class.supported_type?(type)).to eq true
+        end
+      end
+    end
+
+    describe ".shape_of(value)" do
       context "Strings" do
         subject(:subject) { described_class.shape_of("String") }
 

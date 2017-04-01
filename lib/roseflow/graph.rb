@@ -1,5 +1,6 @@
 require "roseflow/tensorflow"
 require "roseflow/tensorflow/protobuf"
+require "roseflow/elements/variable"
 
 module Roseflow
   # Graph is a TensorFlow computation, represented as a dataflow graph.
@@ -10,9 +11,10 @@ module Roseflow
   class Graph
     PROTOBUF_CLASS = ::Roseflow::Tensorflow::Protobuf::GraphDef
 
+    attr_reader :definition
     attr_reader :name
     attr_reader :nodes
-    attr_reader :definition
+    attr_reader :variables
 
     alias :layers :nodes
 
@@ -23,10 +25,17 @@ module Roseflow
         @name = "My Graph"
       end
       @nodes = []
+      @variables = []
     end
 
     def name=(value)
       @name = value
+    end
+
+    def run
+      session = Session.new
+      session.graph = self
+      session.run
     end
 
     # Load a graph definition from JSON and convert to nodes and operations
@@ -43,6 +52,13 @@ module Roseflow
       file.close
     end
 
+    def add_variable(*args)
+      if args.any? && args.first.is_a?(::Roseflow::Elements::Variable)
+        @variables.push(args.first)
+        true
+      end
+    end
+
     # Converts protobuf definition to nodes and operations
     def convert_definition_to_nodes
       definition.node.each do |node|
@@ -52,7 +68,11 @@ module Roseflow
 
     # Converts current graph into a protobuf definition
     def to_graphdef
-      PROTOBUF_CLASS.new
+      @definition
+    end
+
+    def to_proto
+      to_graphdef.to_proto
     end
   end
 end

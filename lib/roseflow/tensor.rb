@@ -28,12 +28,18 @@ module Roseflow
 
     def initialize(value, type = nil)
       validate_type(type)
+      assign_type_settings(type)
       process(value, type)
     end
 
-    def validate_type(type)
-      raise ArgumentError, "Data type #{type} is not (yet) supported." unless supported_type?(type)
-      assign_type_settings(TYPEMAP[:type])
+    def number_of_elements
+      count = 1
+      return count if shape.empty?
+      shape.map{ |i| count *= i }.last
+    end
+
+    def self.supported_type?(type)
+      TYPEMAP.keys.include?(type)
     end
 
     private
@@ -42,10 +48,14 @@ module Roseflow
 
     end
 
+    def validate_type(type)
+      raise ArgumentError, "Data type #{type} is not (yet) supported." unless self.class.supported_type?(type)
+    end
+
     def process(value, type)
       if value.is_a?(Numo::NArray)
         @shape = value.shape
-      elsif value.is_a?(Array)
+      elsif value.instance_of?(Array)
         shape = self.class.shape_of(value)
         @shape = narray_class(type).new(*shape).shape
       else
@@ -55,19 +65,15 @@ module Roseflow
       @rank = @shape.size
     end
 
-    def supported_type?(type)
-      TYPEMAP.keys.include?(type)
-    end
-
     def narray_class(type)
-      TYPEMAP[type].last
+      TYPEMAP.fetch(type).last
     end
 
     def self.shape_of(value)
-      if value.is_a?(Array)
-        if value.any? { |ele| ele.is_a?(Array) }
-          dim = value.group_by { |ele| ele.is_a?(Array) && shape_of(ele) }.keys
-          [value.size] + dim.first if dim.size == 1 && dim.first
+      if value.instance_of?(Array)
+        if value.any? { |ele| ele.instance_of?(Array) }
+          dim = value.group_by { |ele| ele.instance_of?(Array) && shape_of(ele) }.keys
+          [value.size] + dim.first if dim.size.eql?(1)
         else
           [value.size]
         end

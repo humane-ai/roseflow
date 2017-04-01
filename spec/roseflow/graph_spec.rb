@@ -29,7 +29,7 @@ RSpec.describe Roseflow::Graph do
 
     end
 
-    describe "#nodes" do
+    describe "Nodes" do
       context "Empty graph" do
         it "returns the nodes of the graph" do
           expect(subject.nodes).to be_a Array
@@ -58,14 +58,51 @@ RSpec.describe Roseflow::Graph do
         end
       end
     end
+
+    describe "Variables" do
+      context "Graph without variables" do
+        let(:graph) { described_class.new }
+
+        context "Adding a new variable" do
+          let(:variable) { Roseflow::Elements::Variable.new }
+
+          it "adds a new variable to the graph" do
+            expect(graph.variables).to be_empty
+            expect(graph.add_variable(variable)).to eq true
+            expect(graph.variables).to include variable
+          end
+        end
+      end
+
+      context "Graph with variables" do
+        let(:graph) { described_class.new }
+
+        pending
+      end
+    end
   end
 
   describe "Inputs" do
-
+    pending
   end
 
   describe "Outputs" do
+    pending
+  end
 
+  describe "Running the graph" do
+    let(:json) { File.read(fixture_path + "/graph/json/regression.json") }
+    let(:graph) { described_class.new }
+
+    before do
+      graph.definition_from_json(json)
+    end
+
+    it "runs the graph with TensorFlow" do
+      p graph.to_graphdef
+      p graph.to_proto
+      expect(graph.run).to be true
+    end
   end
 
   describe "Loading graph definitions" do
@@ -144,15 +181,19 @@ RSpec.describe Roseflow::Graph do
           expect(subject.version).to eq 0
           expect(subject.versions).to be_nil
         end
+
+        it "can convert them to protobuffers" do
+          expect(subject.to_proto).to be_a String
+        end
       end
 
       context "Graph with nodes" do
         let(:graph) { described_class.new }
-
+        pending
       end
 
       context "Graph with versions" do
-
+        pending
       end
     end
   end

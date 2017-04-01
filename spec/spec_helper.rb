@@ -4,6 +4,7 @@ SimpleCov.start
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "roseflow"
 require "factory_girl"
+require "awesome_print"
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
