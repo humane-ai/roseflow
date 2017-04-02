@@ -18,16 +18,28 @@ RSpec.describe Roseflow::Elements::AttrValue do
           expect(attr_value.shape).to be_a Roseflow::Elements::TensorShape
           expect(attr_value.shape.dimensions).to eq []
         end
+
+        it "builds a tensor shape element object" do
+          expect(Roseflow::Elements::TensorShape).to receive(:new).with({ definition: shape_proto })
+          attr_value.shape
+        end
       end
 
       context "with a tensor" do
         let(:json) { File.read(fixture_path + "/attr_value/json/tensor.json") }
+        let(:tensor_json) { File.read(fixture_path + "/tensor/json/multidim.json") }
+        let(:definition) { Google::Protobuf.decode_json(Roseflow::Tensorflow::Protobuf::TensorProto, tensor_json) }
         let(:attr_value) { described_class.definition_from_json(json) }
 
         it "parses the tensor" do
           expect(attr_value).to be_a described_class
           expect(attr_value.tensor).to be_a Roseflow::Elements::Tensor
           expect(attr_value.tensor.dimensions).to eq [784, 10]
+        end
+
+        it "builds a tensor element object" do
+          expect(Roseflow::Elements::Tensor).to receive(:new).with({ definition: definition })
+          attr_value.tensor
         end
       end
 
@@ -53,13 +65,33 @@ RSpec.describe Roseflow::Elements::AttrValue do
     end
   end
 
+  describe "Type" do
+    context "No definition present" do
+      let(:attr_value) { described_class.new }
+
+      it "returns undefined type" do
+        expect(attr_value.type).to eq :undefined
+      end
+    end
+
+    context "Definition present" do
+      let(:json) { File.read(fixture_path + "/attr_value/json/tensor.json") }
+      let(:definition) { Google::Protobuf.decode_json(described_class::PROTOBUF_CLASS, json) }
+      let(:attr_value) { described_class.new(definition: definition) }
+
+      it "returns the type" do
+        expect(attr_value.type).to eq 0
+      end
+    end
+  end
+
   describe "Method missing" do
     context "methods for protobuf definition" do
       let(:json) { File.read(fixture_path + "/attr_value/json/tensor.json") }
       let(:attr_value_def) { Google::Protobuf.decode_json(described_class::PROTOBUF_CLASS, json) }
       let(:attr_value) { described_class.new(definition: attr_value_def) }
 
-      forwarded_methods = [ :list, :s, :i, :f, :b, :type, :placeholder ]
+      forwarded_methods = [ :list, :s, :i, :f, :b, :placeholder ]
 
       forwarded_methods.each do |method|
         it "forwards the method '#{method}' to protobuf definition" do

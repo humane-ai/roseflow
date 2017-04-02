@@ -4,6 +4,14 @@ module Roseflow::Elements
 
     attr_reader :definition
 
+    def type
+      @type ||= if definition
+        Roseflow::Tensorflow::Protobuf::DataType.const_get(definition.public_send(:type))
+      else
+        :undefined
+      end
+    end
+
     def shape
       @shape ||= TensorShape.new(definition: definition.public_send(:shape))
     end
@@ -13,14 +21,14 @@ module Roseflow::Elements
     end
 
     def self.definition_from_json(json)
-      definition = ::Google::Protobuf.decode_json(PROTOBUF_CLASS, json)
+      definition = Google::Protobuf.decode_json(PROTOBUF_CLASS, json)
       new(definition: definition)
     end
 
     private
 
     def method_missing(name, *args)
-      if [ :list, :s, :i, :f, :b, :type, :placeholder ].include?(name)
+      if [ :list, :s, :i, :f, :b, :placeholder ].include?(name)
         definition.public_send(name, *args)
       else
         super
