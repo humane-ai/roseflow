@@ -69,25 +69,4 @@ RSpec.describe Roseflow::Elements::Tensor do
       end
     end
   end
-
-  describe "Methods" do
-    describe "#definition_is_json?(args)" do
-      let(:json_args) { { definition: "foo", json: true } }
-      let(:non_json_args) { { definition: "bar", json: false } }
-      let(:no_json_args) { { definition: "baz" } }
-      let(:tensor) { described_class.new }
-
-      it "returns true when JSON flag is set" do
-        expect(tensor.definition_is_json?(json_args)).to eq true
-      end
-
-      it "returns false when JSON flag is not set" do
-        expect(tensor.definition_is_json?(non_json_args)).to eq false
-      end
-
-      it "returns false when JSON flag is not present" do
-        expect(tensor.definition_is_json?(no_json_args)).to eq false
-      end
-    end
-  end
 end

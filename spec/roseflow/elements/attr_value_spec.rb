@@ -11,7 +11,7 @@ RSpec.describe Roseflow::Elements::AttrValue do
       context "with a shape" do
         let(:shape_proto) { Roseflow::Tensorflow::Protobuf::TensorShapeProto.new }
         let(:attr_value_def) { Roseflow::Tensorflow::Protobuf::AttrValue.new(shape: shape_proto) }
-        let(:attr_value) { described_class.new(attr_value_def) }
+        let(:attr_value) { described_class.new(definition: attr_value_def) }
 
         it "parses the shape" do
           expect(attr_value).to be_a described_class
@@ -49,6 +49,47 @@ RSpec.describe Roseflow::Elements::AttrValue do
 
       it "returns an instance of AttrValue from a protobuf definition in JSON" do
         expect(described_class.definition_from_json(json)).to be_a described_class
+      end
+    end
+  end
+
+  describe "Method missing" do
+    context "methods for protobuf definition" do
+      let(:json) { File.read(fixture_path + "/attr_value/json/tensor.json") }
+      let(:attr_value_def) { Google::Protobuf.decode_json(described_class::PROTOBUF_CLASS, json) }
+      let(:attr_value) { described_class.new(definition: attr_value_def) }
+
+      forwarded_methods = [ :list, :s, :i, :f, :b, :type, :placeholder ]
+
+      forwarded_methods.each do |method|
+        it "forwards the method '#{method}' to protobuf definition" do
+          expect(attr_value_def).to receive(method)
+          attr_value.send(method)
+        end
+
+        it "passes arguments along" do
+          expect(attr_value_def).to receive(method).with("foo")
+          attr_value.send(method, "foo")
+        end
+      end
+    end
+
+    context "calls to super" do
+      let(:json) { File.read(fixture_path + "/attr_value/json/tensor.json") }
+      let(:attr_value_def) { Google::Protobuf.decode_json(described_class::PROTOBUF_CLASS, json) }
+      let(:attr_value) { described_class.new(definition: attr_value_def) }
+
+      it "does not send undefined methods to protobuf definition" do
+        expect(attr_value_def).not_to receive(:undefined)
+        expect do
+          attr_value.undefined
+        end.to raise_error NoMethodError
+      end
+
+      it "forwards undefined methods the regular way" do
+        expect do
+          attr_value.undefined
+        end.to raise_error NoMethodError
       end
     end
   end
