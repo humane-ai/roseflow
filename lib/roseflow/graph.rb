@@ -68,10 +68,12 @@ module Roseflow
 
     # Converts current graph into a protobuf definition
     def to_graphdef
-      @definition
+      return false if @description.nil?
+      definition
     end
 
     def to_proto
+      return false if @description.nil?
       to_graphdef.to_proto
     end
   end
