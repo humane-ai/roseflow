@@ -1,5 +1,7 @@
 module Roseflow::Elements
   class AttrValue
+    PROTOBUF_CLASS = ::Roseflow::Tensorflow::Protobuf::AttrValue
+
     def initialize(attr, *args)
       @definition = attr
       if args.any?
@@ -14,12 +16,21 @@ module Roseflow::Elements
       @shape ||= TensorShape.new(definition: @definition.send(:shape))
     end
 
+    def tensor
+      @tensor ||= Tensor.new(definition: @definition.send(:tensor))
+    end
+
     def method_missing(name, *args)
-      if [ :list, :s, :i, :f, :b, :type, :tensor, :placeholder ].include?(name.to_sym)
+      if [ :list, :s, :i, :f, :b, :type, :placeholder ].include?(name.to_sym)
         @definition.send(name, *args)
       else
         super
       end
+    end
+
+    def self.definition_from_json(json)
+      definition = ::Google::Protobuf.decode_json(PROTOBUF_CLASS, json)
+      new(definition)
     end
   end
 end
