@@ -40,13 +40,13 @@ module Roseflow
 
     # Load a graph definition from JSON and convert to nodes and operations
     def definition_from_json(json)
-      @definition = ::Google::Protobuf.decode_json(PROTOBUF_CLASS, json)
+      @definition = Google::Protobuf.decode_json(PROTOBUF_CLASS, json)
       convert_definition_to_nodes
     end
 
     # Load a graph definition from a file and convert to nodes and operations
     def definition_from_file(file)
-      @definition = ::Google::Protobuf.decode(PROTOBUF_CLASS, file.read)
+      @definition = Google::Protobuf.decode(PROTOBUF_CLASS, file.read)
       convert_definition_to_nodes
     ensure
       file.close
