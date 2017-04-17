@@ -1,4 +1,4 @@
-require "roseflow/tensorflow/data_converters/type_safety"
+require "roseflow/tensorflow/type_safety"
 
 module Roseflow::Tensorflow
   class ManagedPointer < FFI::AutoPointer

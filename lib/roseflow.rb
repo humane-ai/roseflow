@@ -20,16 +20,25 @@
 # THE SOFTWARE.
 #++
 
-module Roseflow
-end
-
 require "active_support"
 require "active_support/all"
+
+module Roseflow
+  extend ActiveSupport::Autoload
+
+  autoload :Graph
+  autoload :Elements
+  autoload :Node
+  autoload :Session
+  autoload :Tensor
+  autoload :Tensorflow
+end
+
 require "numo/narray"
 require "roseflow/libc"
-require "roseflow/graph"
-require "roseflow/node"
-require "roseflow/session"
-require "roseflow/tensor"
-require "roseflow/tensorflow"
-require "roseflow/elements"
+# require "roseflow/graph"
+# require "roseflow/node"
+# require "roseflow/session"
+# require "roseflow/tensor"
+# require "roseflow/tensorflow"
+# require "roseflow/elements"

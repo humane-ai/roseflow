@@ -1,7 +1,3 @@
-require "roseflow/tensorflow"
-require "roseflow/tensorflow/protobuf"
-require "roseflow/elements/variable"
-
 module Roseflow
   # Graph is a TensorFlow computation, represented as a dataflow graph.
   #
@@ -19,7 +15,7 @@ module Roseflow
     alias :layers :nodes
 
     def initialize(*args)
-      if args && args.is_a?(Hash) && args[:name]
+      if args.is_a?(Hash) && args.has_key?(:name)
         @name = args[:name]
       else
         @name = "My Graph"
@@ -30,6 +26,10 @@ module Roseflow
 
     def name=(value)
       @name = value
+    end
+
+    def inputs
+      @inputs ||= CollectionProxy.new
     end
 
     def run
@@ -52,11 +52,8 @@ module Roseflow
       file.close
     end
 
-    def add_variable(*args)
-      if args.any? && args.first.is_a?(::Roseflow::Elements::Variable)
-        @variables.push(args.first)
-        true
-      end
+    def add_variable(variable)
+      @variables.push(variable) if variable.is_a?(::Roseflow::Elements::Variable)
     end
 
     # Converts protobuf definition to nodes and operations
@@ -68,12 +65,12 @@ module Roseflow
 
     # Converts current graph into a protobuf definition
     def to_graphdef
-      return false if @description.nil?
+      return false unless @description.is_a?(::Roseflow::TensorFlow::Protobuf::GraphDef)
       definition
     end
 
     def to_proto
-      return false if @description.nil?
+      return false unless @description.is_a?(::Roseflow::TensorFlow::Protobuf::GraphDef)
       to_graphdef.to_proto
     end
   end
