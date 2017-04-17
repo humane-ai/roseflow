@@ -68,14 +68,16 @@ RSpec.describe Roseflow::Graph do
 
           it "adds a new variable to the graph" do
             expect(graph.variables).to be_empty
-            expect(graph.add_variable(variable)).to eq true
+            expect(graph.add_variable(variable)).to be_truthy
             expect(graph.variables).to include variable
           end
         end
       end
 
       context "Graph with variables" do
-        let(:graph) { described_class.new }
+        let(:graph) do
+          graph = described_class.new
+        end
 
         pending
       end
@@ -83,7 +85,23 @@ RSpec.describe Roseflow::Graph do
   end
 
   describe "Inputs" do
-    pending
+    context "No inputs" do
+
+    end
+
+    context "Adding inputs" do
+      let(:graph) { described_class.new }
+
+      it "adds a new input to the graph" do
+        input = graph.inputs.new()
+        expect(input).to be_a Roseflow::Elements::Input
+        expect(graph.inputs.count).to eq 1
+      end
+    end
+
+    context "Removing inputs" do
+
+    end
   end
 
   describe "Outputs" do

@@ -27,13 +27,6 @@ module Roseflow
     LIB_SO_NAMES = [
       "libtensorflow.so".freeze
     ]
-
-    extend ActiveSupport::Autoload
-
-    autoload :API
-    autoload :Protobuf
-    autoload :TypeSafety
-    autoload :Utility
   end
 end
 
