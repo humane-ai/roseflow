@@ -26,16 +26,22 @@ require "active_support/all"
 module Roseflow
   extend ActiveSupport::Autoload
 
+  autoload :ActiveGraph
   autoload :Graph
   autoload :Elements
   autoload :Node
   autoload :Session
   autoload :Tensor
   autoload :Tensorflow
+
+  eager_autoload do
+    autoload :Errors
+  end
 end
 
 require "numo/narray"
 require "roseflow/libc"
+require "roseflow/errors"
 # require "roseflow/graph"
 # require "roseflow/node"
 # require "roseflow/session"

@@ -91,11 +91,24 @@ RSpec.describe Roseflow::Graph do
 
     context "Adding inputs" do
       let(:graph) { described_class.new }
+      let(:input_attr) do
+        {
+          description: "New Input",
+          name: :input_1,
+          values: [1,2,3],
+          placeholder: false,
+          type: :float32,
+          shape: [nil, 784]
+        }
+      end
 
       it "adds a new input to the graph" do
-        input = graph.inputs.new()
-        expect(input).to be_a Roseflow::Elements::Input
+        inputs = graph.inputs.build(input_attr)
+        expect(inputs.first).to be_a Roseflow::Elements::Input
         expect(graph.inputs.count).to eq 1
+        input = graph.inputs.first
+        expect(input.name).to eq :input_1
+        expect(input.description).to eq "New Input"
       end
     end
 

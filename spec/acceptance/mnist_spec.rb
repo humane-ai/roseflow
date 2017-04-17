@@ -17,7 +17,7 @@ RSpec.describe "MNIST Handwriting Recognition" do
 
       it "defines model, trains the model, runs with test data" do
         graph = Roseflow::Graph.new
-        graph.inputs.add "Images", training_data, placeholder: true, type: :float32, shape: [nil, 784]
+        graph.inputs.add "Images", :images, training_data, placeholder: true, type: :float32, shape: [nil, 784]
         expect(graph.inputs.count).to eq 1
         expect(graph.placeholders.count).to eq 1
         graph.weights.new "MatMul Weights", :matmul_weights, Numo::DFloat.zeros(784, 10)

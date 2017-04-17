@@ -1,5 +1,5 @@
 module Roseflow::Elements
-  class AttrValue < BaseElement
+  class AttrValue < BaseProtobufElement
     PROTOBUF_CLASS = ::Roseflow::Tensorflow::Protobuf::AttrValue
 
     attr_reader :definition

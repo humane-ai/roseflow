@@ -1,11 +1,14 @@
 module Roseflow::Elements
-end
+  extend ActiveSupport::Autoload
 
-require "roseflow/elements/base_element"
-require "roseflow/elements/attr_value"
-require "roseflow/elements/data_type"
-require "roseflow/elements/input"
-require "roseflow/elements/output"
-require "roseflow/elements/tensor_shape"
-require "roseflow/elements/tensor"
-require "roseflow/elements/variable"
+  autoload :BaseElement
+  autoload :BaseProtobufElement
+  autoload :AttrValue
+  autoload :DataType
+  autoload :Input
+  autoload :Output
+  autoload :Placeholder
+  autoload :TensorShape
+  autoload :Tensor
+  autoload :Variable
+end

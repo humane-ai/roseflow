@@ -1,5 +1,5 @@
 module Roseflow::Elements
-  class Tensor < BaseElement
+  class Tensor < BaseProtobufElement
     PROTOBUF_CLASS = ::Roseflow::Tensorflow::Protobuf::TensorProto
 
     def dimensions

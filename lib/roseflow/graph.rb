@@ -29,7 +29,11 @@ module Roseflow
     end
 
     def inputs
-      @inputs ||= CollectionProxy.new
+      @inputs ||= ::Roseflow::ActiveGraph::CollectionProxy.new(::Roseflow::Elements::Input, :inputs)
+    end
+
+    def placeholders
+      @placeholders ||= ::Roseflow::ActiveGraph::CollectionProxy.new(::Roseflow::Elements::Placeholder, :placeholders)
     end
 
     def run
