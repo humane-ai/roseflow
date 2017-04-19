@@ -1,7 +1,3 @@
-require "roseflow/tensorflow"
-require "roseflow/tensorflow/protobuf"
-require "roseflow/elements/variable"
-
 module Roseflow
   # Graph is a TensorFlow computation, represented as a dataflow graph.
   #
@@ -16,10 +12,10 @@ module Roseflow
     attr_reader :nodes
     attr_reader :variables
 
-    alias :layers :nodes
+    # alias :layers :nodes
 
     def initialize(*args)
-      if args && args.is_a?(Hash) && args[:name]
+      if args.is_a?(Hash) && args.has_key?(:name)
         @name = args[:name]
       else
         @name = "My Graph"
@@ -40,23 +36,20 @@ module Roseflow
 
     # Load a graph definition from JSON and convert to nodes and operations
     def definition_from_json(json)
-      @definition = ::Google::Protobuf.decode_json(PROTOBUF_CLASS, json)
+      @definition = Google::Protobuf.decode_json(PROTOBUF_CLASS, json)
       convert_definition_to_nodes
     end
 
     # Load a graph definition from a file and convert to nodes and operations
     def definition_from_file(file)
-      @definition = ::Google::Protobuf.decode(PROTOBUF_CLASS, file.read)
+      @definition = Google::Protobuf.decode(PROTOBUF_CLASS, file.read)
       convert_definition_to_nodes
     ensure
       file.close
     end
 
-    def add_variable(*args)
-      if args.any? && args.first.is_a?(::Roseflow::Elements::Variable)
-        @variables.push(args.first)
-        true
-      end
+    def add_variable(variable)
+      @variables.push(variable) if variable.is_a?(::Roseflow::Elements::Variable)
     end
 
     # Converts protobuf definition to nodes and operations
@@ -68,10 +61,12 @@ module Roseflow
 
     # Converts current graph into a protobuf definition
     def to_graphdef
-      @definition
+      return false unless @description.is_a?(::Roseflow::TensorFlow::Protobuf::GraphDef)
+      definition
     end
 
     def to_proto
+      return false unless @description.is_a?(::Roseflow::TensorFlow::Protobuf::GraphDef)
       to_graphdef.to_proto
     end
   end

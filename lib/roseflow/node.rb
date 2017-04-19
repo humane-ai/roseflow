@@ -1,5 +1,3 @@
-require "roseflow/elements/data_type"
-
 module Roseflow
   class Node
     PROTOBUF_CLASS = ::Roseflow::Tensorflow::Protobuf::NodeDef

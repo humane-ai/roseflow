@@ -51,11 +51,6 @@ RSpec.describe Roseflow::Graph do
             expect(node).to be_a Roseflow::Node
           end
         end
-
-        it "allows to access nodes with alias" do
-          expect(subject.layers).to be_a Array
-          expect(subject.layers.count).to eq 13
-        end
       end
     end
 
@@ -68,14 +63,16 @@ RSpec.describe Roseflow::Graph do
 
           it "adds a new variable to the graph" do
             expect(graph.variables).to be_empty
-            expect(graph.add_variable(variable)).to eq true
+            expect(graph.add_variable(variable)).to be_truthy
             expect(graph.variables).to include variable
           end
         end
       end
 
       context "Graph with variables" do
-        let(:graph) { described_class.new }
+        let(:graph) do
+          graph = described_class.new
+        end
 
         pending
       end
@@ -83,14 +80,24 @@ RSpec.describe Roseflow::Graph do
   end
 
   describe "Inputs" do
-    pending
+    context "No inputs" do
+
+    end
+
+    context "Adding inputs" do
+
+    end
+
+    context "Removing inputs" do
+
+    end
   end
 
   describe "Outputs" do
     pending
   end
 
-  describe "Running the graph" do
+  describe "Running the graph", skip: "Session class not yet fully implemented" do
     let(:json) { File.read(fixture_path + "/graph/json/regression.json") }
     let(:graph) { described_class.new }
 
@@ -99,8 +106,6 @@ RSpec.describe Roseflow::Graph do
     end
 
     it "runs the graph with TensorFlow" do
-      p graph.to_graphdef
-      p graph.to_proto
       expect(graph.run).to be true
     end
   end
@@ -167,23 +172,22 @@ RSpec.describe Roseflow::Graph do
     end
   end
 
-  describe "Graph definitions" do
+  describe "Graph definitions", skip: "Not yet implemented" do
     context "Converting graph to a graph definition" do
       context "Empty graph" do
         let(:graph) { described_class.new }
-
-        subject(:subject) { graph.to_graphdef }
+        let(:graphdef) { graph.to_graphdef }
 
         it "returns GraphDef of the graph" do
-          expect(subject).to be_a described_class::PROTOBUF_CLASS
-          expect(subject.node).to be_empty
-          expect(subject.library).to be_nil
-          expect(subject.version).to eq 0
-          expect(subject.versions).to be_nil
+          expect(graphdef).to be_a described_class::PROTOBUF_CLASS
+          expect(graphdef.node).to be_empty
+          expect(graphdef.library).to be_nil
+          expect(graphdef.version).to eq 0
+          expect(graphdef.versions).to be_nil
         end
 
         it "can convert them to protobuffers" do
-          expect(subject.to_proto).to be_a String
+          expect(graphdef.to_proto).to be_a String
         end
       end
 

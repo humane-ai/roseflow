@@ -1,5 +1,3 @@
-require "roseflow/tensorflow"
-
 module Roseflow
   # Session is a class for running TensorFlow operations.
 

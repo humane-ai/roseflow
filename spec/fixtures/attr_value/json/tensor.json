@@ -1,0 +1,27 @@
+{
+  "tensor": {
+    "dtype": "DT_FLOAT",
+    "tensorShape": {
+      "dim": [
+        {
+          "size": 784
+        },
+        {
+          "size": 10
+        }
+      ]
+    },
+    "floatVal": [
+      0
+    ],
+    "doubleVal": [],
+    "intVal": [],
+    "stringVal": [],
+    "scomplexVal": [],
+    "int64Val": [],
+    "boolVal": [],
+    "dcomplexVal": [],
+    "halfVal": [],
+    "resourceHandleVal": []
+  }
+}
