@@ -51,11 +51,6 @@ RSpec.describe Roseflow::Graph do
             expect(node).to be_a Roseflow::Node
           end
         end
-
-        it "allows to access nodes with alias" do
-          expect(subject.layers).to be_a Array
-          expect(subject.layers.count).to eq 13
-        end
       end
     end
 
@@ -90,26 +85,7 @@ RSpec.describe Roseflow::Graph do
     end
 
     context "Adding inputs" do
-      let(:graph) { described_class.new }
-      let(:input_attr) do
-        {
-          description: "New Input",
-          name: :input_1,
-          values: [1,2,3],
-          placeholder: false,
-          type: :float32,
-          shape: [nil, 784]
-        }
-      end
 
-      it "adds a new input to the graph" do
-        inputs = graph.inputs.build(input_attr)
-        expect(inputs.first).to be_a Roseflow::Elements::Input
-        expect(graph.inputs.count).to eq 1
-        input = graph.inputs.first
-        expect(input.name).to eq :input_1
-        expect(input.description).to eq "New Input"
-      end
     end
 
     context "Removing inputs" do

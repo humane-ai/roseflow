@@ -1,7 +1,7 @@
-module Roseflow::Elements
-  class Placeholder < BaseElement
+module Roseflow::ActiveGraph
+  class Placeholder
     def initialize(args = {}, &block)
-      super(args)
+      raise ArgumentError, "Invalid arguments" unless args.instance_of?(Hash)
       yield if block_given?
     end
 

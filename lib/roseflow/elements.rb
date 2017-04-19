@@ -3,6 +3,7 @@ module Roseflow::Elements
 
   autoload :BaseElement
   autoload :BaseProtobufElement
+  autoload :Bias
   autoload :AttrValue
   autoload :DataType
   autoload :Input
@@ -11,4 +12,5 @@ module Roseflow::Elements
   autoload :TensorShape
   autoload :Tensor
   autoload :Variable
+  autoload :Weight
 end

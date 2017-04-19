@@ -12,7 +12,7 @@ module Roseflow
     attr_reader :nodes
     attr_reader :variables
 
-    alias :layers :nodes
+    # alias :layers :nodes
 
     def initialize(*args)
       if args.is_a?(Hash) && args.has_key?(:name)
@@ -26,14 +26,6 @@ module Roseflow
 
     def name=(value)
       @name = value
-    end
-
-    def inputs
-      @inputs ||= ::Roseflow::ActiveGraph::CollectionProxy.new(::Roseflow::Elements::Input, :inputs)
-    end
-
-    def placeholders
-      @placeholders ||= ::Roseflow::ActiveGraph::CollectionProxy.new(::Roseflow::Elements::Placeholder, :placeholders)
     end
 
     def run

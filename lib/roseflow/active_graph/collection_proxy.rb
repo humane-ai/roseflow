@@ -2,14 +2,16 @@ module Roseflow::ActiveGraph
   class CollectionProxy
     attr_reader :klass
 
-    def initialize(klass, collection)
+    def initialize(klass, collection, owner = nil)
       @klass = klass
       @collection = []
+      @owner = owner
     end
 
     def build(attributes = {}, &block)
-      object = @klass.build(attributes, &block)
+      object = @klass.build(attributes, @owner, &block)
       @collection.push(object)
+      object
     end
 
     def add(description = nil, name, data, options, &block)
